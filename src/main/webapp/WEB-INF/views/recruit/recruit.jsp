@@ -84,7 +84,7 @@
                             </li>
                             <li><a href='javascript:void(0)'
                                    onclick='listAgain("rcrbrd_views", "<%=keyword3%>")'>인기순</a></li>
-                            <li><a href='javascript:void(0)' onclick='listAgain("cnt", "<%=keyword3%>")'>참가인원 많은 순</a>
+                            <li><a href='javascript:void(0)' onclick='listAgain("count", "<%=keyword3%>")'>참가인원 많은 순</a>
                             </li>
                         </ul>
                     </div>
@@ -150,7 +150,9 @@
 
             <div style="margin: auto" id="more_div">
                 <input type="hidden" id="more_order" name="more_order" value="rcrbrd_num">
-                <% String keyword2 = request.getParameter("gs_keyword");%>
+                <input type="hidden" id="listSize" name="listSize" value="${list[0].rcrbrd_num}">
+                <% String keyword2 = request.getParameter("gs_keyword");
+                if (keyword2 == null) { keyword2 = ""; } %>
                 <button type="button" id="more" class="btn btn-outline-danger"
                         onclick="more($('#startCount').val(), $('#endCount').val(), $('#more_order').val(), '<%=keyword2%>')">
                     더보기 (more)
@@ -177,10 +179,10 @@
             type: "POST",
             dataType: "json",
             success: function (data) {
-
                 $.each(data, function (index, value) {
                     gameName.push(value.gm_name);
                     gameCode.push(value.gm_code);
+
                 });
             },
             error: function (request, status, error) {
@@ -239,15 +241,17 @@
 
                 });
 
-                let listSize =
-                ${list[0].rcrbrd_num}
+                let listSize = $('#listSize').val();
+                if (listSize == null) {
+                    listSize = 0;
+                }
 
                 if ($('#endCount').val() >= listSize) {
                     $('#more_div').css("display", "none");
                 } else {
                     $('#startCount').val((parseInt($('#startCount').val())) + 9);
                     $('#endCount').val((parseInt($('#endCount').val())) + 9);
-                }
+                };
 
                 $('#board').append(message);
             },
@@ -257,61 +261,6 @@
         })
 
     } // more() end
-
-
-    /*
-    function more(id, cnt) {
-    let list_length = ${list.size()};
-        let aname = id + "_btn";
-        let callLength = list_length;
-
-        $('#startCount').val(callLength);
-        $('#viewCount').val(cnt);
-
-        $.ajax({
-            type: "post",
-            url: "/recruit/getMoreContents"
-            data: $('#recruitMain').serialize(),
-            dataType: "json",
-            success: function (data) {
-                if (data.resultCnt > 0) {
-                    let list = data.resultlist;
-                    if(row.rcrbrd_subject != '') {
-                        $('#'+aname).attr('href', "javascript:moreContent('"+id+"', "+cnt+");");
-                        getMoreList(list);
-                    } else {
-                        $("#"+id).remove();
-                    }
-                }
-            },
-            error: function (request, status, error) {
-                console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            }
-        });
-    }
-
-    function getMoreList(list) {
-        let content = "";
-        let length = list.length;
-        for (let i = 0; i < list.length; i++) {
-            let row = list[i];
-            if (row.rcrbrd_subject != '') {
-                content += '<div class="col-lg-4 col-md-4 col-sm-4">';
-                content += '<div class=\"<a href="/recruit/detail/' + row.rcrbrd_num+ '">\"';
-                content += '<div class="blog__item" style="box-shadow: 1px 1px 1px 1px #a69bae; padding: 7px; border-radius: 1%">';
-                content += '<div class="blog__item__pic">';
-                content += '<img src="/images/thumb/' + row.gm_code + '/thumb.jpg" alt="">';
-                content += '</div>';
-                content += '<div class="blog__item__text">';
-                content += '</div>';
-                content += '</div>';
-                content += '</a>';
-                content += '</div>';
-            }
-        }
-        $("#more_list div:last").after(content);
-    }
-    */
 
     function listAgain(order, keyword) {
 
@@ -327,7 +276,7 @@
             success: function (result) {
 
                 let message = "";
-                let listSize = ${list[0].rcrbrd_num};
+                let listSize = $('#listSize').val();
                 $('#startCount').val(9);
                 $('#endCount').val(17);
 

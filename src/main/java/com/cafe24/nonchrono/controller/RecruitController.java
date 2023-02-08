@@ -24,6 +24,10 @@ import java.util.*;
 @RequestMapping("/recruit")
 public class RecruitController {
 
+    /*
+        품목 : 관리자가 입력한 본체, 게임 타이틀, 악세사리 등 품목 (콘솔 게임으로 판매되는 상품이 한정적이라 품목을 미리 정해놓음)
+        상품 : 판매자가 등록한 판매 상품. 품목을 등록하면 정보를 가져와서 쓴다
+    */
 
     @Autowired
     private RecruitDAO recruitDAO;
@@ -40,37 +44,44 @@ public class RecruitController {
     public ModelAndView recruitList(HttpSession session, String order) {
         RecruitDTO dto = new RecruitDTO();
         ModelAndView mav = new ModelAndView();
+        // 정렬에 사용할 변수. 기본값을 최신순으로 설정해준다
         String order2 = "rcrbrd_num";
         if (order == null || order.equals("")) {
             order = order2;
         }
-        // System.out.println("order : " + order);
+
+        // 종료일이 끝나지 않은 진행 중인 모집글의 정보(댓글 수, 참여 수 포함)를 9개까지 가져온다
         List<RecruitDTO> list = recruitDAO.list(order);
+        // 품목 코드를 담을 리스트 선언
         List<String> gameList = new ArrayList<>();
+        // 참여한 멤버에 대한 정보를 담을 리스트 선언
         List<String> attendMembers = new ArrayList<>();
 
+        // 모집글의 수만큼 반복
         for (int i = 0; i < list.size(); i++) {
+            // dto에 모집글의 정보를 담는다
             dto = list.get(i);
+            // 모집글 게시글 번호를 가져와서 변수에 담는다
             int num = dto.getRcrbrd_num();
-            // 게임 이름 가져오기
+            // 해당 게시글 번호의 품목명을 가져와서 리스트에 담는다
             gameList.add(recruitDAO.game(num));
-            // 참여한 모집원들 수
+            // 참여한 멤버의 수를 가져와서 리스트에 담는다
             attendMembers.add(String.valueOf(recruitDAO.attendMembers(num).size()));
-
-            //System.out.println("num : " + num);
-            //System.out.println("게임 이름 : "+gameList.get(i));
         }
 
+        // 현재 세션에 저장된 아이디를 가져와서 변수에 담는다
         String mem_id = (String) session.getAttribute("mem_id");
+        // 현재 세션에 저장된 아이디가 있다면
         if (mem_id != null && !mem_id.equals("guest")) {
-            mav.addObject("list", list);
-            mav.addObject("game", gameList);
-            mav.addObject("attendCount", attendMembers);
-            mav.addObject("rcrKing", recruitDAO.rcrKing());
-            mav.addObject("searchRank", recruitDAO.searchRank());
-            // System.out.println(recruitDAO.rcrKing());
+            mav.addObject("list", list); // 모집글 정보
+            mav.addObject("game", gameList); // 게임명
+            mav.addObject("attendCount", attendMembers); // 참여한 멤버 수
+            mav.addObject("rcrKing", recruitDAO.rcrKing()); // 모집글 작성자 중 가장 많은 모집글을 작성한 사람
+            mav.addObject("searchRank", recruitDAO.searchRank()); // 검색 랭킹
+            // 모집 게시판 홈으로 이동
             mav.setViewName("/recruit/recruit");
         } else {
+            // 로그인 화면으로 이동
             mav.setViewName("/mem/loginForm");
         }
         return mav;
@@ -79,40 +90,26 @@ public class RecruitController {
     // ajax로 정렬 기준 바꿀 때
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
+    // 정렬 기준과 검색어를 받아온다
     public List<MoreDTO> recruitListAjax(HttpSession session, String order, String keyword) {
+        // 재정렬로 가져올 모집글 정보를 담을 리스트 선언
         List<MoreDTO> list = new ArrayList<>();
 
+        // 정렬에 사용할 변수. 기본값을 최신순으로 설정해준다
         String order2 = "rcrbrd_num";
         if (order == null || order.equals("")) {
             order = order2;
         }
-        // System.out.println("keyword : " + keyword);
-        // System.out.println("order : " + order);
+
+        // 키워드가 없을 때 정렬 기준에 따라 모집글을 가져온다
         if (keyword.equals("null") || keyword.equals("")) {
-            // System.out.println("keyword null");
             list = recruitDAO.listAjax(order);
         } else {
-            // System.out.println("keyword not null");
+            // 키워드가 있을 때 검색어와 정렬 기준에 따라 모집글을 가져온다
             list = recruitDAO.listAjax2(order, keyword);
         }
-        // System.out.println(list);
-        List<MoreDTO> list2 = new ArrayList<>();
 
-        for (int i = 0; i < list.size(); i++) {
-            MoreDTO moreDTO = new MoreDTO();
-            moreDTO.setRcrbrd_num(list.get(i).getRcrbrd_num());
-            moreDTO.setGm_code(list.get(i).getGm_code());
-            moreDTO.setGm_name(list.get(i).getGm_name());
-            moreDTO.setRcrbrd_subject(list.get(i).getRcrbrd_subject());
-            moreDTO.setRcrbrd_edate(list.get(i).getRcrbrd_edate());
-            moreDTO.setRcrbrd_max(list.get(i).getRcrbrd_max());
-            moreDTO.setCount(recruitDAO.attendMembers(list.get(i).getRcrbrd_num()).size());
-            moreDTO.setCom_count(list.get(i).getCom_count());
-
-            list2.add(i, moreDTO);
-        }
-        // System.out.println(list2);
-        return list2;
+        return list;
     } // recruitList() end
 
     // 모집 게시판 글 작성
@@ -120,11 +117,16 @@ public class RecruitController {
     public ModelAndView recruitForm(HttpServletRequest req) throws Exception {
         ModelAndView mav = new ModelAndView();
         HttpSession session = req.getSession();
+        // 현재 세션에 저장된 아이디를 가져와서 변수에 담는다
         String mem_id = (String) session.getAttribute("mem_id");
+        // 현재 세션에 저장된 회원 아이디가 있다면
         if (mem_id != null && !mem_id.equals("guest")) {
+            // 아이디에 맞는 닉네임을 가져온다
             mav.addObject("nickname", recruitDAO.nickname(mem_id));
+            // 모집 게시판 글 작성 화면으로 이동
             mav.setViewName("/recruit/recruitForm");
         } else {
+            // 로그인 화면으로 이동
             mav.setViewName("/mem/loginForm");
         }
         return mav;
@@ -134,43 +136,51 @@ public class RecruitController {
     @RequestMapping( "/searchProc")
     @ResponseBody
     public String search(HttpServletRequest req) {
+        // 검색어를 가져온다
         String keyword = req.getParameter("gs_keyword").trim();
-        String message = ""; // 응답 메세지
-
+        // 응답 메세지에 담을 변수 선언
+        String message = "";
 
         // 검색어가 존재할 때
-        if (keyword.length() > 0) {
+        if (keyword.trim().length() > 0) {
+            // 검색어가 포함된 품목의 코드와 품목명을 가져온다 (원래는 품목 중에 게임 타이틀로만 제한해둬야하지만 굳이 하지 않았다)
             ArrayList<String> list = searchList(keyword);
             ArrayList<String> list2 = new ArrayList<String>();
 
             RecruitDTO dto = new RecruitDTO();
 
-
             int size = list.size();
+            // 품목이 존재할 때
             if (size > 0) {
-
                 // 타이틀 제목을 message에 담기
+                // 총 사이즈를 담고 구분자 ^^^로 구분 (|로 구분했다가 품목명에 |이 들어간 게임은 구분이 되지 않았다)
                 message += size + "^^^";
                 for (int i = 0; i < size; i++) {
+                    // 품목명를 변수로 선언
                     String title = list.get(i);
+                    // message 변수에 품목명을 담는다
                     message += title;
-                    // System.out.println(recruitDAO.gm_list2(title));
+                    // 품목명에 맞는 품목 코드를 리스트2에 담는다
                     list2.add(recruitDAO.gm_list2(title));
-                    // System.out.println(list2.get(i));
+                    // 마지막 품목명이 아닐 때
                     if (i < size - 1) {
+                        // 품목명을 ,로 구분한다
                         message += ",";
                     } // if end
                 } // for end
 
-                // 구분
+                // 품목명을 담은 후 다시 구분자 ^^^로 구분
                 message += "^^^";
 
                 // 타이틀 코드를 message에 담기
                 for (int j = 0; j < size; j++) {
+                    // 품목 코드를 변수로 선언
                     String code = list2.get(j);
-                    // System.out.println("code : " + code);
+                    // message 변수에 품목 코드를 담는다
                     message += code;
+                    // 마지막 품목 코드가 아닐 때
                     if (j < size - 1) {
+                        // 품목 코드를 ,로 구분한다
                         message += ",";
                     } // if end
                 } // for end
@@ -178,33 +188,34 @@ public class RecruitController {
             } // if end
         } // if end
 
-        // System.out.println("view로 전달값 : " + message);
-
         return message;
     } // searchProc() end
 
     // 모집 게시판 검색 리스트
     public ArrayList<String> searchList(String keyword) {
-        // 검색하고자 하는 게임 타이틀 목록
+        // 품목 목록을 담기 위해 리스트2를 선언
         ArrayList<String> list2 = new ArrayList<String>();
+        // 품목명과 품목 코드를 가져와서 그 사이즈만큼 반복
         for (int i = 0; i < recruitDAO.gm_list().size(); i++) {
-            // 게임 타이틀 목록 중 검색어가 포함된 게임 타이틀을 list2에 추가
+            // 품목명을 list2에 추가
             list2.add(recruitDAO.gm_list().get(i).getGm_name());
         } // for end
 
-
+        // list2의 내용을 keywords 배열에 담는다
         String[] keywords = list2.toArray(new String[list2.size()]);
 
+        // 검색어에 맞는 품목명을 담기 위한 리스트를 선언
         ArrayList<String> list = new ArrayList<String>();
+        // keywords 배열에 담긴 값을 word 변수에 하나씩 배당하며 반복한다
         for (String word : keywords) {
+            // 영문자의 경우 대소문자를 구분하지 않기 위해 모두 대문자로 바꾼다
             word = word.toUpperCase();
+            // word 변수에 keyword가 포함되어있을 때
             if (word.contains(keyword.toUpperCase())) {
+                // list에 word를 추가한다
                 list.add(word);
             } // if end
         } // for end
-
-        // System.out.println("전체 게임 목록 : " + list2);
-        // System.out.println("검색어가 포함된 리스트 : " + list);
         return list;
     } // searchList() end
 
@@ -233,10 +244,10 @@ public class RecruitController {
 
             String ckUploadPath = path + uid + "_" + fileName;
             File folder = new File(path);
-            // System.out.println("path : " + path);// 이미지 저장경로 console에 확인//해당 디렉토리 확인
+            // 폴더가 존재하지 않는다면
             if (!folder.exists()) {
                 try {
-                    folder.mkdirs();// 폴더 생성
+                    folder.mkdirs(); // 폴더 생성
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -282,7 +293,6 @@ public class RecruitController {
         ServletContext application = req.getSession().getServletContext();
         String path = ResourceUtils.getURL("classpath:static/images").getPath(); // 이미지 경로 설정(폴더 자동 생성)
         path = path + "/recruit/";
-        // System.out.println("path : " + path);
         String sDirPath = path + uid + "_" + fileName;
 
         File imgFile = new File(sDirPath);
@@ -326,9 +336,10 @@ public class RecruitController {
     @RequestMapping("/detail/{rcrbrd_num}")
     public ModelAndView recruitDetail(@PathVariable int rcrbrd_num, HttpSession session) {
         ModelAndView mav = new ModelAndView();
+        // 세션에 담긴 아이디 가져오기
         String mem_id = (String) session.getAttribute("mem_id");
-        // System.out.println(mem_id);
 
+        // 로그인 상태라면
         if (mem_id != null && !mem_id.equals("guest")) {
             mav.addObject("views", recruitDAO.views(rcrbrd_num)); // 조회수 증가
             mav.addObject("detail", recruitDAO.detail(rcrbrd_num)); // 모집 정보 상세보기
@@ -337,25 +348,20 @@ public class RecruitController {
             mav.addObject("recruitCount", recruitDAO.recruitCount(rcrbrd_num)); // 게시판의 모집장의 모집 횟수 카운트
             mav.addObject("roleList", recruitDAO.roleList(rcrbrd_num)); // 역할 테이블에서 역할 리스트 가져오기
             mav.addObject("roleNameSeat", recruitDAO.roleName(rcrbrd_num)); // 역할 배정 테이블에서 역할 이름과 좌석 번호 가져오기
-            // mav.addObject("attendMembers", recruitDAO.attendMembers(rcrbrd_num)); // 참여자 목록 가져오기
             mav.addObject("attendCheck", recruitDAO.attendCheck(rcrbrd_num, mem_id)); // 본인이 어느 자리에 참가했는지 확인
             mav.addObject("attendCount", recruitDAO.attendCount(rcrbrd_num, mem_id)); // 본인이 참가한 횟수 확인
             mav.addObject("memName", recruitDAO.memName(rcrbrd_num)); // 자리와 id 조회
             mav.addObject("memNick", recruitDAO.memNick(rcrbrd_num)); // 자리당 닉네임 조회
-            mav.addObject("mem_id", mem_id);
+            mav.addObject("mem_id", mem_id); // 세션에 담긴 아이디 전달
             mav.addObject("memPic", recruitDAO.memPic(rcrbrd_num)); // 자리당 프로필 사진 조회 // 아직 참가 안 한 자리는 ''로 표현
             mav.addObject("memSeat", recruitDAO.memSeat(rcrbrd_num)); // 자리당 좌석 번호 조회 // 아직 참가 안 한 자리는 ''로 표현
             mav.addObject("memTemp", memDAO.temp(recruitDAO.memDetail(rcrbrd_num).getMem_id())); // 모집장의 온도 가져오기
             mav.addObject("commentList", recruitDAO.commentList(rcrbrd_num)); // 댓글 목록 불러오기
-        /*
-        List<RoleSeatDTO> rname = recruitDAO.roleName(rcrbrd_num);
 
-        System.out.println(rname);
-        mav.addObject("rname", rname); // 역할 이름 리스트
-        */
-
+            // 모집 상세 페이지로 이동
             mav.setViewName("/recruit/recruitDetail");
         } else {
+            // 로그인 폼으로 이동
             mav.setViewName("/mem/loginForm");
         }
         return mav;
@@ -365,17 +371,20 @@ public class RecruitController {
     @RequestMapping("/insert")
     public String recruitInsert(@ModelAttribute RecruitDTO recruitDTO, @ModelAttribute RoleDTO roleDTO, @RequestParam int useMileage, HttpServletRequest req, HttpSession session) {
 
+        // 로그인 아이디 가져오기
         String mem_id = (String) session.getAttribute("mem_id");
 
+        // 가용 마일리지 가져오기
         int mileage = recruitDAO.mileageCheck(mem_id);
-        // 마일리지 사용
+        // 마일리지 사용 (사용하려는 마일리지가 가용 마일리지보다 작을 때)
         if (mileage >= useMileage) {
             recruitDAO.useMileage(mem_id, useMileage);
         } else {
+            // 마일리지가 부족하다면 작성폼으로 다시 이동
             return "redirect:/recruit/form";
         }
 
-        // 모집 내용 insert
+        // 모집 내용 insert (hiddenCount = 역할 추가 수)
         recruitDAO.insert(recruitDTO, Integer.parseInt(req.getParameter("hiddenCount")));
         // 위에서 insert한 게시글 번호 가져오기
         int num = recruitDAO.numSearch();

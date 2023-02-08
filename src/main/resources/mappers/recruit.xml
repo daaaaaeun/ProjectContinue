@@ -38,7 +38,7 @@
                (SELECT count(*) FROM tb_comment where rcrbrd_num = rb.rcrbrd_num) as com_count,
                (SELECT count(mem_id)
                 FROM tb_recruitinfo
-                WHERE rcrbrd_num = rb.rcrbrd_num)                                 as cnt
+                WHERE rcrbrd_num = rb.rcrbrd_num)                                 as count
         FROM tb_rcrboard rb
                  join tb_game gm
                       ON rb.gm_code = gm.gm_code
@@ -277,11 +277,12 @@
 
     <!-- 이번달 모집왕 -->
     <select id="rcrKing" resultType="java.util.Map">
-        SELECT mm.mem_nick, mm.mem_id, count(*) as cnt
+        SELECT mm.mem_nick, mm.mem_id, count(*) as cnt, rb.rcrbrd_date
         FROM tb_mem as mm
                  JOIN tb_rcrboard as rb
                       on mm.mem_id = rb.mem_id
-        group by rb.mem_id
+        group by rb.mem_id, rb.rcrbrd_date
+        having DATE_FORMAT(rb.rcrbrd_date, '%Y-%m') = DATE_FORMAT(now(), '%Y-%m')
         order by count(*) DESC
         Limit 5
     </select>
@@ -473,7 +474,7 @@
                (SELECT count(*) FROM tb_comment where rcrbrd_num = rb.rcrbrd_num) as com_count,
                (SELECT count(mem_id)
                 FROM tb_recruitinfo
-                WHERE rcrbrd_num = rb.rcrbrd_num)                                 as cnt
+                WHERE rcrbrd_num = rb.rcrbrd_num)                                 as count
         FROM tb_rcrboard rb
                  join tb_game gm
                       ON rb.gm_code = gm.gm_code
