@@ -150,8 +150,8 @@
 
             <div style="margin: auto" id="more_div">
                 <input type="hidden" id="more_order" name="more_order" value="rcrbrd_num">
-                <input type="hidden" id="listSize" name="listSize" value="${list[0].rcrbrd_num}">
-                <input type="hidden" id="listSize2" value="${list.size()}">
+                <input type="hidden" id="listSize" name="listSize" value=${list[0].rcrbrd_num}>
+                <%--<input type="hidden" id="listSize" value=${list.size()}>--%>
                 <% String keyword2 = request.getParameter("gs_keyword");
                 if (keyword2 == null) { keyword2 = ""; } %>
                 <button type="button" id="more" class="btn btn-outline-danger"
@@ -191,8 +191,8 @@
             }
         });
 
-        // 더보기 버튼이 글 갯수가 9개 미만일시는 보이지 않게 처리
-        if (parseInt($('#listSize2').val()) < 9) {
+        // 더보기 버튼이 글 갯수가 10개 미만일시는 보이지 않게 처리
+        if ($('#listSize').val() < 10) {
             $('#more_div').hide();
         } else {
             $('#more_div').show();
@@ -318,8 +318,10 @@
                 $('#board').html(message);
                 $('#more_order').val(order);
 
-                if (8 < listSize) {
+                if ($('#listSize').val() > 9) {
                     $('#more_div').show();
+                } else {
+                    $('#more_div').hide();
                 }
             },
             error: function (request, status, error) {
