@@ -83,8 +83,8 @@
                             <li><a href='javascript:void(0)' onclick='listAgain("rcrbrd_num", "<%=keyword3%>")'>최신순</a>
                             </li>
                             <li><a href='javascript:void(0)'
-                                   onclick='listAgain("rcrbrd_views", "<%=keyword3%>")'>인기순</a></li>
-                            <li><a href='javascript:void(0)' onclick='listAgain("count", "<%=keyword3%>")'>참가인원 많은 순</a>
+                                   onclick='listAgain("rcrbrd_views", "<%=keyword3%>")'>조회순</a></li>
+                            <li><a href='javascript:void(0)' onclick='listAgain("cnt", "<%=keyword3%>")'>참가인원 많은 순</a>
                             </li>
                         </ul>
                     </div>
@@ -205,6 +205,7 @@
         console.log("시작 번호 : " + startCount);
         console.log("마지막 번호 : " + endCount);
         console.log("keyword : " + keyword);
+        console.log("order : " + order);
 
         $.ajax({
             type: "post",
