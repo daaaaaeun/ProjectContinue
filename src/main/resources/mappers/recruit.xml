@@ -136,6 +136,18 @@
         WHERE rcrbrd_num = #{rcrbrd_num}
     </select>
 
+    <!-- 게시판 번호에 맞는 좌석 정보 가져오기 (좌석, 회원, 역할) / 역할이 지정되지 않는 이상 검색되지 않으므로 폐기 -->
+    <!--<select id="seatDetail" parameterType="int" resultType="java.util.LinkedHashMap">
+        SELECT rs.rl_name, rs.rs_seat,
+        CASE WHEN ri.ri_seat = rs.rs_seat THEN ri.mem_id ELSE '' END AS mem_id,
+        CASE WHEN ri.ri_seat = rs.rs_seat THEN mm.mem_nick ELSE '' END AS mem_nick,
+        CASE WHEN ri.ri_seat = rs.rs_seat THEN mm.mem_pic ELSE '' END AS mem_pic
+        FROM tb_roleseat rs
+        LEFT JOIN tb_recruitinfo ri ON ri.rcrbrd_num = rs.rcrbrd_num AND ri.ri_seat = rs.rs_seat
+        LEFT JOIN tb_mem mm ON ri.mem_id = mm.mem_id
+        WHERE rs.rcrbrd_num = #{rcrbrd_num}
+    </select>-->
+
     <!-- 멤버 아이디로 닉네임 가져오기 -->
     <select id="nickname" parameterType="String" resultType="String">
         SELECT mem_nick
@@ -150,6 +162,14 @@
         VALUES (#{mem_id}, #{rcrbrd_subject}, #{rcrbrd_content}, #{rcrbrd_pw}, #{rcrbrd_views}, now(), #{rcrbrd_edate},
                 #{rcrbrd_ip}, #{gm_code}, #{rcrbrd_status}, #{rcrbrd_adr}, #{rcrbrd_max})
     </insert>
+
+    <!-- 참가 신청 전 체크 과정 -->
+    <select id="attendCheck" parameterType="java.util.Map" resultType="Integer">
+        SELECT ri_seat
+        FROM tb_recruitinfo
+        WHERE rcrbrd_num = #{rcrbrd_num}
+          AND mem_id = #{mem_id}
+    </select>
 
     <!-- 모집 상세에서 참가 신청 -->
     <insert id="attend" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO">
@@ -232,14 +252,6 @@
         WHERE rcrbrd_num = #{rcrbrd_num}
     </select>
 
-    <!-- 로그인한 사용자가 해당 게시물에서 참가 버튼을 눌렀는지 여부 -->
-    <select id="attendCount" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO" resultType="int">
-        SELECT count(*)
-        FROM tb_recruitinfo
-        WHERE rcrbrd_num = #{rcrbrd_num}
-          AND mem_id in (#{mem_id})
-    </select>
-
     <!-- 자리당 아이디 조회 -->
     <select id="memName" parameterType="int" resultType="com.cafe24.nonchrono.dto.RecruitInfoDTO">
         SELECT mem_id, ri_seat
@@ -278,7 +290,7 @@
     <select id="rcrKing" resultType="java.util.Map">
         SELECT mm.mem_nick, mm.mem_id, count(*) as cnt
         FROM tb_mem as mm JOIN tb_rcrboard as rb
-        on mm.mem_id = rb.mem_id
+                               on mm.mem_id = rb.mem_id
         where DATE_FORMAT(rb.rcrbrd_date, '%Y-%m') = DATE_FORMAT(now(), '%Y-%m')
         group by rb.mem_id
         order by count(*) DESC
@@ -374,13 +386,6 @@
         INSERT INTO tb_search (sc_word, sc_date, sc_where)
         VALUES (#{sc_word}, now(), '모집')
     </insert>
-
-    <select id="attendCheck" parameterType="java.util.Map" resultType="int">
-        SELECT ri_seat
-        FROM tb_recruitinfo
-        WHERE rcrbrd_num = #{rcrbrd_num}
-          AND mem_id = #{mem_id}
-    </select>
 
     <select id="memSeat" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO" resultType="String">
         SELECT mem_id
