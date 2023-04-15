@@ -341,21 +341,27 @@ public class RecruitController {
 
         // 로그인 상태라면
         if (mem_id != null && !mem_id.equals("guest")) {
+            Map<String, Object> detail = recruitDAO.detail(rcrbrd_num);
+            RecruitDTO recruitDTO = (RecruitDTO) detail.get("rcrBoard"); // 모집 정보
+            GameDTO gameDTO = (GameDTO) detail.get("game"); // 게임 정보
+            MemDTO memDTO = (MemDTO) detail.get("member"); // 모집장 정보
+            int cnt = Integer.parseInt((String.valueOf(detail.get("cnt")))); // 모집장의 모집 횟수
+
+            mav.addObject("mem_id", mem_id); // 세션에 담긴 아이디 전달
             mav.addObject("views", recruitDAO.views(rcrbrd_num)); // 조회수 증가
-            mav.addObject("detail", recruitDAO.detail(rcrbrd_num)); // 모집 정보 상세보기
-            mav.addObject("gameDetail", recruitDAO.gameDetail(rcrbrd_num)); // 게임 정보 상세보기
-            mav.addObject("memDetail", recruitDAO.memDetail(rcrbrd_num)); // 모집장 정보 상세보기
-            mav.addObject("recruitCount", recruitDAO.recruitCount(rcrbrd_num)); // 게시판의 모집장의 모집 횟수 카운트
+            mav.addObject("detail", recruitDTO); // 모집 정보 상세보기
+            mav.addObject("gameDetail", gameDTO); // 게임 정보 상세보기
+            mav.addObject("memDetail", memDTO); // 모집장 정보 상세보기
+            mav.addObject("recruitCount", cnt); // 모집장의 모집 횟수 카운트
             mav.addObject("roleList", recruitDAO.roleList(rcrbrd_num)); // 역할 테이블에서 역할 리스트 가져오기
             mav.addObject("roleNameSeat", recruitDAO.roleName(rcrbrd_num)); // 역할 배정 테이블에서 역할 이름과 좌석 번호 가져오기
             mav.addObject("attendCheck", recruitDAO.attendCheck(rcrbrd_num, mem_id)); // 본인이 어느 자리에 참가했는지 확인
             mav.addObject("attendCount", recruitDAO.attendCount(rcrbrd_num, mem_id)); // 본인이 참가한 횟수 확인
             mav.addObject("memName", recruitDAO.memName(rcrbrd_num)); // 자리와 id 조회
             mav.addObject("memNick", recruitDAO.memNick(rcrbrd_num)); // 자리당 닉네임 조회
-            mav.addObject("mem_id", mem_id); // 세션에 담긴 아이디 전달
             mav.addObject("memPic", recruitDAO.memPic(rcrbrd_num)); // 자리당 프로필 사진 조회 // 아직 참가 안 한 자리는 ''로 표현
             mav.addObject("memSeat", recruitDAO.memSeat(rcrbrd_num)); // 자리당 좌석 번호 조회 // 아직 참가 안 한 자리는 ''로 표현
-            mav.addObject("memTemp", memDAO.temp(recruitDAO.memDetail(rcrbrd_num).getMem_id())); // 모집장의 온도 가져오기
+            mav.addObject("memTemp", memDAO.temp(memDTO.getMem_id())); // 모집장의 온도 가져오기
             mav.addObject("commentList", recruitDAO.commentList(rcrbrd_num)); // 댓글 목록 불러오기
 
             // 모집 상세 페이지로 이동

@@ -42,21 +42,9 @@ public class RecruitDAO {
         return sqlSession.selectOne("recruit.gm_list2", title);
     } // gm_name() end
 
-    public RecruitDTO detail(int rcrbrd_num) {
+    public HashMap<String, Object> detail(int rcrbrd_num) {
         return sqlSession.selectOne("recruit.detail", rcrbrd_num);
     } // detail() end
-
-    public GameDTO gameDetail(int rcrbrd_num) {
-        return sqlSession.selectOne("recruit.gameDetail", rcrbrd_num);
-    } // detail2() end
-
-    public MemDTO memDetail(int rcrbrd_num) {
-        return sqlSession.selectOne("recruit.memDetail", rcrbrd_num);
-    } // detail2() end
-
-    public int recruitCount(int rcrbrd_num) {
-        return sqlSession.selectOne("recruit.recruitCount", rcrbrd_num);
-    } // recruitCount() end
 
     public String nickname(String mem_id) {
         return sqlSession.selectOne("recruit.nickname", mem_id);
