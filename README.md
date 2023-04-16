@@ -1,12 +1,15 @@
 # Continue?
 
----
 
-![logo.png](Images/logo.png)
+![logo.png](Images/logo.png)  
+
+</br>
 
 - **프로젝트 주제**
 
 : 게임 관련 오픈 마켓 & 게임 오프라인 모집 사이트
+
+</br>
 
 - **프로젝트 기간 & 인원 & 역할**
 
@@ -15,6 +18,8 @@
 모집 게시판과 출석체크 미니게임, 관리자 페이지의 크롤링 파트 담당 (Jsoup 이용)
 
 그 외에도 팀장으로서 일정 분배와 파트 분배, Git 관리, 기술 자문, 로고 제작 등을 하였습니다.
+
+</br>
 
 - **사용 기술**
 
@@ -26,15 +31,20 @@ Database : MyBatis, MariaDB
 
 Server : Apache Tomcat
 
+</br>
+
 - **Github**
 
 : [https://github.com/Nonchrono/ProjectContinue](https://github.com/Nonchrono/ProjectContinue)
+
+</br>
 
 - **호스팅**
 
 : [http://nonchrono.cafe24.com](http://nonchrono.cafe24.com)
 
  
+</br>
 
 <aside>
 ✅ **회원 & 판매자 로그인**<br>
@@ -47,19 +57,25 @@ PW : admin<br>
 
 </aside>
 
+</br>
+
 - **ERD**
     
-    ![nonchrono2.png](Images/nonchrono2.png)
+![nonchrono2.png](Images/nonchrono2.png)
     
+
+</br>
 
 - **담당 업무**
 1. 모집 부분 : 모집글 등록, 모집 메인, 모집 상세
 2. 관리자 부분 : 자동 등록
 3. 미니게임
 
+</br>
+
 - **기능 설명 및 시연 이미지**
     
-    ![nonchrono.cafe24.com_recruit.png](Images/nonchrono.cafe24.com_recruit.png)
+![nonchrono.cafe24.com_recruit.png](Images/nonchrono.cafe24.com_recruit.png)
     
 
 ---
