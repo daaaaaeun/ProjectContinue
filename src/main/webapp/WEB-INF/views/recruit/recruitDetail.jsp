@@ -269,48 +269,52 @@
                         </div>
                         <hr>
                     </div>
-                    <%--<c:forEach var="seat" items="${seatDetail}" varStatus="vs">
+                    <c:forEach var="seat" items="${seatDetail}" varStatus="vs">
                         <div class="col-lg-3 col-md-4 col-sm-4">
                             <div class="product__item">
                                 <c:choose>
-                                    <c:when test="${seat.get('mem_pic') != '' and seat.get('mem_pic') != 'ProfilePicture.png' and seat.get('mem_id') != ''}">
-                                        <div id="profile${vs.count}" class="product__item__pic set-bg" style="text-align: center;">
-                                        <img src="/images/profile/${seat.get('mem_id')}/${seat.get('mem_pic')}" alt="profile" style="height: 100%; overflow: hidden;">
+                                    <c:when test="${seat.get('mem_id') != ''}">
+                                    <div id="profile${vs.count}" class="product__item__pic set-bg" style="text-align: center;">
+                                        <img src="/images/profile/${seat.get('mem_id')}/${seat.get('mem_pic')}"
+                                             style="height: 100%; overflow: hidden;">
                                     </c:when>
                                     <c:otherwise>
-                                        <div id="profile${vs.count}" class="product__item__pic set-bg" data-setbg="/images/profile/ProfilePicture.png" style="text-align: center">
+                                        <div id="profile${vs.count}" class="product__item__pic set-bg"
+                                            data-setbg="/images/profile/ProfilePicture.png" style="text-align: center">
                                     </c:otherwise>
                                 </c:choose>
-                                <input type="hidden" id="recruitseat${vs.count}" name="recruitseat${vs.count}" value="${vs.count}">
+                                <input type="hidden" id="recruitseat${vs.count}" name="recruitseat${vs.count}"
+                                       value="${vs.count}">
                                 <ul class="product__item__pic__hover">
                                 <c:choose>
-                                    &lt;%&ndash; 그 방에 참가했거나 모집장인 경우 &ndash;%&gt;
+                                    <%-- 그 방에 참가했거나 모집장인 경우 --%>
                                     <c:when test="${attendCheck > 0 or detail.mem_id eq mem_id}">
-                                        &lt;%&ndash; 그 자리에 참가한 인원이 있을 경우 &ndash;%&gt;
+                                        <%-- 그 자리에 참가한 인원이 있을 경우 --%>
                                         <c:if test="${seat.get('mem_id') != ''}">
-                                            &lt;%&ndash; 본인을 제외하고 신고와 하트를 출력 &ndash;%&gt;
+                                            <%-- 본인을 제외하고 신고와 하트를 출력 --%>
                                             <c:if test="${attendCheck != vs.count}">
-                                            <li>
-                                                <a onclick="heart('${seat.get('mem_id')}', '${seat.get('mem_nick')}')"
-                                                   style="cursor: pointer; padding-top: 0%"><i class="fa fa-heart"></i></a></li>
-                                            <li>
-                                                <a onclick="declare('${seat.get('mem_id')}', '${seat.get('mem_nick')}')"
-                                                   style="cursor: pointer; padding-top: 0%">신고</a></li>
+                                                <li>
+                                                    <a onclick="heart('${seat.get('mem_id')}', '${seat.get('mem_nick')}')"
+                                                       style="cursor: pointer; padding-top: 0%"><i
+                                                            class="fa fa-heart"></i></a></li>
+                                                <li>
+                                                    <a onclick="declare('${seat.get('mem_id')}', '${seat.get('mem_nick')}')"
+                                                       style="cursor: pointer; padding-top: 0%">신고</a></li>
                                             </c:if>
                                         </c:if>
                                     </c:when>
                                     <c:otherwise>
-                                        &lt;%&ndash; 그 자리에 참가한 인원이 없을 경우 &ndash;%&gt;
+                                        <%-- 그 자리에 참가한 인원이 없을 경우 --%>
                                         <c:if test="${seat.get('mem_id') == ''}">
                                             <li><span id="attendBtn${vs.count}"
                                                       onclick="attend(${vs.count}, '${mem_id}')">참가</span>
                                             </li>
                                         </c:if>
-                                        &lt;%&ndash; 그 자리에 참가한 인원이 있을 경우 &ndash;%&gt;
                                         <c:if test="${seat.get('mem_id') != ''}">
                                             <li>
                                                 <a onclick="heart('${seat.get('mem_id')}', '${seat.get('mem_nick')}')"
-                                                   style="cursor: pointer; padding-top: 0%"><i class="fa fa-heart"></i></a></li>
+                                                   style="cursor: pointer; padding-top: 0%"><i
+                                                        class="fa fa-heart"></i></a></li>
                                             <li>
                                                 <a onclick="declare('${seat.get('mem_id')}', '${seat.get('mem_nick')}')"
                                                    style="cursor: pointer; padding-top: 0%">신고</a></li>
@@ -319,10 +323,10 @@
                                 </c:choose>
                                 </ul>
                                 <c:choose>
-                                    <c:when test="${detail.mem_id eq mem_id}">
+                                    <c:when test="${detail.mem_id eq sessionScope.mem_id}">
                                         <select id="roleSelect${vs.count}" name="roleSelect${vs.count}">
                                             <c:forEach var="role" items="${roleList}" varStatus="vs2">
-                                                &lt;%&ndash; 사용자가 선택한 옵션 출력 &ndash;%&gt;
+                                                <%-- 사용자가 선택한 옵션 출력 --%>
                                                 <option value="${role.rl_name}"
                                                         id="${vs.count}option${vs2.count}">${role.rl_name}
                                                 </option>
@@ -334,116 +338,25 @@
                                         </button>
                                     </c:when>
                                 </c:choose>
-                                </div>
-                                <div class="product__item__text">
-                                    <h6 id="attendText${vs.count}" name="attendText${vs.count}">
-                                        <c:if test="${vs.count == seat.get('rs_seat') and seat.get('mem_id') != ''}">
-                                            ${seat.get('mem_nick').trim()} (${seat.get('mem_id').trim()})
+                            </div>
+                            <div class="product__item__text">
+                                <h6 id="attendText${vs.count}" name="attendText${vs.count}">
+                                <c:if test="${seat.get('mem_id') != ''}">
+                                    ${seat.get('mem_nick')} (${seat.get('mem_id')})
+                                </c:if>
+                                </h6>
+                                <h5 id="roleText${vs.count}" name="roleText${vs.count}">
+                                    <c:forEach var="role" items="${roleNameSeat}" varStatus="vs3">
+                                        <%-- vs.count번째 자리에 vs.count와 자리 번호가 동일하면 역할 부여 --%>
+                                        <c:if test="${vs.count == role.rs_seat}">
+                                            ${role.rl_name.trim()}
                                         </c:if>
-                                    </h6>
-                                    <h5 id="roleText${vs.count}" name="roleText${vs.count}">
-                                        <c:if test="${vs.count == seat.get('rs_seat')}">
-                                            ${seat.get('rl_name').trim()}
-                                        </c:if>
-                                    </h5>
-                                </div>
+                                    </c:forEach>
+                                </h5>
                             </div>
                         </div>
+                    </div>
                     </c:forEach>
-                </div>--%>
-
-
-
-                    <c:forEach var="row" begin="1" end="${detail.rcrbrd_max}" step="1" varStatus="vs">
-                    <div class="col-lg-3 col-md-4 col-sm-4">
-                        <div class="product__item">
-                            <c:choose>
-                            <c:when test="${memPic[vs.index-1] != '' and memPic[vs.index-1] != 'ProfilePicture.png' and memSeat[vs.index-1] != ''}">
-                            <div id="profile${vs.count}" class="product__item__pic set-bg" style="text-align: center;">
-                                <img src="/images/profile/${memSeat[vs.index-1]}/${memPic[vs.index-1]}"
-                                     style="height: 100%; overflow: hidden;">
-                                </c:when>
-                                <c:otherwise>
-                                <div id="profile${vs.count}" class="product__item__pic set-bg"
-                                     data-setbg="/images/profile/ProfilePicture.png" style="text-align: center">
-                                    </c:otherwise>
-                                    </c:choose>
-                                    <input type="hidden" id="recruitseat${vs.count}" name="recruitseat${vs.count}"
-                                           value="${vs.count}">
-                                    <ul class="product__item__pic__hover">
-                                        <c:choose>
-                                            <%-- 그 방에 참가했거나 모집장인 경우 --%>
-                                            <c:when test="${attendCheck > 0 or detail.mem_id eq mem_id}">
-                                                <%-- 그 자리에 참가한 인원이 없을 경우 --%>
-                                                <c:if test="${memNick[vs.index - 1] != ''}">
-                                                    <%-- 본인을 제외하고 신고와 하트를 출력 --%>
-                                                    <c:if test="${attendCheck != vs.index}">
-                                                        <li>
-                                                            <a onclick="heart('${memSeat[vs.index-1]}', '${memNick[vs.index-1]}')"
-                                                               style="cursor: pointer; padding-top: 0%"><i
-                                                                    class="fa fa-heart"></i></a></li>
-                                                        <li>
-                                                            <a onclick="declare('${memSeat[vs.index-1]}', '${memNick[vs.index-1]}')"
-                                                               style="cursor: pointer; padding-top: 0%">신고</a></li>
-                                                    </c:if>
-                                                </c:if>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <c:if test="${memNick[vs.index - 1] == ''}">
-                                                    <li><span id="attendBtn${vs.count}"
-                                                              onclick="attend(${vs.count}, '${mem_id}')">참가</span>
-                                                    </li>
-                                                </c:if>
-                                                <c:if test="${memNick[vs.index - 1] != ''}">
-                                                    <li>
-                                                        <a onclick="heart('${memSeat[vs.index-1]}', '${memNick[vs.index-1]}')"
-                                                           style="cursor: pointer; padding-top: 0%"><i
-                                                                class="fa fa-heart"></i></a></li>
-                                                    <li>
-                                                        <a onclick="declare('${memSeat[vs.index-1]}', '${memNick[vs.index-1]}')"
-                                                           style="cursor: pointer">신고</a></li>
-                                                </c:if>
-
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </ul>
-                                    <c:choose>
-                                        <c:when test="${detail.mem_id eq sessionScope.mem_id}">
-                                            <select id="roleSelect${vs.count}" name="roleSelect${vs.count}">
-                                                <c:forEach var="role" items="${roleList}" varStatus="vs2">
-                                                    <%-- 사용자가 선택한 옵션 출력 --%>
-                                                    <option value="${role.rl_name}"
-                                                            id="${vs.count}option${vs2.count}">${role.rl_name}
-                                                    </option>
-                                                </c:forEach>
-                                            </select>
-                                            <button type="button" id="roleBtn${vs.count}"
-                                                    onclick="roleConfirm(${fn:length(roleList)}, $(this).attr('id'))"
-                                                    class="btn btn-warning" style="float: left; margin-left: 2px">확정
-                                            </button>
-                                        </c:when>
-                                    </c:choose>
-                                </div>
-                                <div class="product__item__text">
-                                    <h6 id="attendText${vs.count}" name="attendText${vs.count}">
-                                        <c:forEach var="mem" items="${memName}" varStatus="vs4">
-                                            <c:if test="${vs.count == mem.ri_seat}">
-                                                ${memNick[mem.ri_seat-1]} (${mem.mem_id})
-                                            </c:if>
-                                        </c:forEach>
-                                    </h6>
-                                    <h5 id="roleText${vs.count}" name="roleText${vs.count}">
-                                        <c:forEach var="role" items="${roleNameSeat}" varStatus="vs3">
-                                            <%-- vs.count번째 자리에 vs.count와 자리 번호가 동일하면 역할 부여 --%>
-                                            <c:if test="${vs.count == role.rs_seat}">
-                                                ${role.rl_name.trim()}
-                                            </c:if>
-                                        </c:forEach>
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        </c:forEach>
                     </div>
                     <hr>
                     <form id="commentForm" onsubmit="return commentCheck()" method="post">

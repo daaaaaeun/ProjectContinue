@@ -148,6 +148,14 @@
         WHERE rs.rcrbrd_num = #{rcrbrd_num}
     </select>-->
 
+    <!-- 좌석 번호에 맞는 좌석 정보 가져오기 (아이디, 닉네임, 프로필) -->
+    <select id="seatDetail" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO" resultType="java.util.LinkedHashMap">
+        SELECT ri.mem_id, mm.mem_nick, mm.mem_pic
+        FROM tb_recruitinfo ri
+        INNER JOIN tb_mem mm on ri.mem_id = mm.mem_id
+        WHERE ri.rcrbrd_num = #{rcrbrd_num} AND ri.ri_seat = #{ri_seat}
+    </select>
+
     <!-- 멤버 아이디로 닉네임 가져오기 -->
     <select id="nickname" parameterType="String" resultType="String">
         SELECT mem_nick

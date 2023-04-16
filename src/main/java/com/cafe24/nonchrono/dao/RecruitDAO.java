@@ -118,6 +118,10 @@ public class RecruitDAO {
         return sqlSession.selectList("recruit.attendMembers", rcrbrd_num);
     } // attendMembers() end
 
+    public Map<String, String> seatDetail(RecruitInfoDTO recruitInfoDTO) {
+        return sqlSession.selectOne("recruit.seatDetail", recruitInfoDTO);
+    }
+
     public List<RecruitInfoDTO> memName(int rcrbrd_num) {
         return sqlSession.selectList("recruit.memName", rcrbrd_num);
     }
