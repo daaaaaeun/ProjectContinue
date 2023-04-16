@@ -47,10 +47,11 @@ Server : Apache Tomcat
 </br>
 
 <aside>
+
 ✅ **회원 & 판매자 로그인**<br>
 ID : webmaster<br>
 PW : 12345<br>
-
+<br>
 **관리자 로그인** (최상단 좌측의 continue?를 클릭하여 관리자 모드 진입 가능)<br>
 ID : admin<br>
 PW : admin<br>
