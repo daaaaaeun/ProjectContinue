@@ -118,7 +118,7 @@ public class RecruitController {
     } // recruitForm() end
 
     // 모집 게시판 검색 과정
-    @RequestMapping( "/searchProc")
+    /*@RequestMapping( "/searchProc")
     @ResponseBody
     public String search(HttpServletRequest req) {
         // 검색어를 가져온다
@@ -174,10 +174,10 @@ public class RecruitController {
         } // if end
 
         return message;
-    } // searchProc() end
+    } // searchProc() end*/
 
     // 모집 게시판 검색 리스트
-    public ArrayList<String> searchList(String keyword) {
+    /*public ArrayList<String> searchList(String keyword) {
         // 품목 목록을 담기 위해 리스트2를 선언
         ArrayList<String> list2 = new ArrayList<String>();
         // 품목명과 품목 코드를 가져와서 그 사이즈만큼 반복
@@ -202,7 +202,7 @@ public class RecruitController {
             } // if end
         } // for end
         return list;
-    } // searchList() end
+    } // searchList() end*/
 
     // CKEditor 이미지 업로드
     @RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
