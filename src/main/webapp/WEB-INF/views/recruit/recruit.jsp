@@ -131,10 +131,10 @@
                                             <br><li><i class="fa fa-comment-o"></i> ${row.com_count}</li>
                                         </ul>
                                         <h5>${row.rcrbrd_subject}</h5>
-                                        <p>${game[vs.index]}</p>
+                                        <p>${row.gm_name}</p>
                                         <span id="list${vs.count}"
                                               name="list${vs.count}"
-                                              style="color: #7796dc">(${attendCount.get(vs.index)} / ${row.rcrbrd_max})</span>
+                                              style="color: #7796dc">(${row.cnt} / ${row.rcrbrd_max})</span>
                                     </div>
                                 </div>
                             </a>

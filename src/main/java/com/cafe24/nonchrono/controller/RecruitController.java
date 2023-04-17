@@ -1,6 +1,6 @@
 package com.cafe24.nonchrono.controller;
 
-import com.cafe24.nonchrono.Service.RecruitService;
+import com.cafe24.nonchrono.service.RecruitService;
 import com.cafe24.nonchrono.dao.MemDAO;
 import com.cafe24.nonchrono.dao.RecruitDAO;
 import com.cafe24.nonchrono.dto.*;
@@ -56,34 +56,15 @@ public class RecruitController {
 
         // 종료일이 끝나지 않은 진행 중인 모집글의 정보(댓글 수, 참여 수 포함)를 9개까지 가져온다
         List<RecruitDTO> list = recruitDAO.list(order);
-        // 품목 코드를 담을 리스트 선언
-        List<String> gameList = new ArrayList<>();
-        // 참여한 멤버에 대한 정보를 담을 리스트 선언
-        List<String> attendMembers = new ArrayList<>();
-
-        // 모집글의 수만큼 반복
-        for (int i = 0; i < list.size(); i++) {
-            // dto에 모집글의 정보를 담는다
-            dto = list.get(i);
-            // 모집글 게시글 번호를 가져와서 변수에 담는다
-            int num = dto.getRcrbrd_num();
-            // 해당 게시글 번호의 품목명을 가져와서 리스트에 담는다
-            gameList.add(recruitDAO.game(num));
-            // 참여한 멤버의 수를 가져와서 리스트에 담는다
-            attendMembers.add(String.valueOf(recruitDAO.attendMembers(num).size()));
-        }
 
         // 현재 세션에 저장된 아이디를 가져와서 변수에 담는다
         String mem_id = (String) session.getAttribute("mem_id");
         // 현재 세션에 저장된 아이디가 있다면
         if (mem_id != null && !mem_id.equals("guest")) {
             mav.addObject("list", list); // 모집글 정보
-            mav.addObject("game", gameList); // 게임명
-            mav.addObject("attendCount", attendMembers); // 참여한 멤버 수
             mav.addObject("rcrKing", recruitDAO.rcrKing()); // 모집글 작성자 중 가장 많은 모집글을 작성한 사람
             mav.addObject("searchRank", recruitDAO.searchRank()); // 검색 랭킹
-            // 모집 게시판 홈으로 이동
-            mav.setViewName("/recruit/recruit");
+            mav.setViewName("/recruit/recruit"); // 모집 게시판 홈으로 이동
         } else {
             // 로그인 화면으로 이동
             mav.setViewName("/mem/loginForm");
@@ -97,7 +78,7 @@ public class RecruitController {
     // 정렬 기준과 검색어를 받아온다
     public List<MoreDTO> recruitListAjax(HttpSession session, String order, String keyword) {
         // 재정렬로 가져올 모집글 정보를 담을 리스트 선언
-        List<MoreDTO> list = new ArrayList<>();
+        List<MoreDTO> list;
 
         // 정렬에 사용할 변수. 기본값을 최신순으로 설정해준다
         String order2 = "rcrbrd_num";
@@ -206,7 +187,7 @@ public class RecruitController {
         } // for end
 
         // list2의 내용을 keywords 배열에 담는다
-        String[] keywords = list2.toArray(new String[list2.size()]);
+        String[] keywords = list2.toArray(new String[0]);
 
         // 검색어에 맞는 품목명을 담기 위한 리스트를 선언
         ArrayList<String> list = new ArrayList<String>();
@@ -282,8 +263,7 @@ public class RecruitController {
                 e.printStackTrace();
             }
         }
-        return;
-    }// imageUpload() end
+    } // imageUpload() end
 
     // CKEditor 서버로 전송된 이미지 뿌려주기
     @RequestMapping(value = "/ckImgSubmit")
@@ -293,7 +273,6 @@ public class RecruitController {
             throws ServletException, IOException {
 
         //서버에 저장된 이미지 경로
-        // String path = "target/classes/static/images/recruit/";
         ServletContext application = req.getSession().getServletContext();
         String path = ResourceUtils.getURL("classpath:static/images").getPath(); // 이미지 경로 설정(폴더 자동 생성)
         path = path + "/recruit/";
@@ -361,9 +340,9 @@ public class RecruitController {
             mav.addObject("memTemp", memDAO.temp(memDTO.getMem_id())); // 모집장의 온도 가져오기
 
             /* 역할 & 좌석 관련 */
-            mav.addObject("roleList", recruitDAO.roleList(rcrbrd_num)); // 역할 테이블에서 역할 리스트 가져오기
+            mav.addObject("roleList", recruitDAO.roleList(rcrbrd_num)); // 역할 테이블에서 역할 리스트 가져오기 (모집장)
             mav.addObject("attendCheck", recruitDAO.attendCheck(rcrbrd_num, mem_id)); // 본인이 어느 자리에 참가했는지 확인
-            mav.addObject("roleNameSeat", recruitDAO.roleName(rcrbrd_num)); // 역할 배정 테이블에서 역할 이름과 좌석 번호 가져오기
+            mav.addObject("roleNameSeat", recruitDAO.roleName(rcrbrd_num)); // 역할 배정 테이블에서 역할 이름과 좌석 번호 가져오기 (참가자)
             mav.addObject("seatDetail", recruitService.seatDetail(rcrbrd_num, recruitDTO.getRcrbrd_max())); // 좌석 번호에 맞는 아이디, 프로필, 닉네임 가져오기
 
             /* 댓글 관련 */
@@ -431,66 +410,18 @@ public class RecruitController {
         }
     } // roleConfirm() end
 
-    // 역할 배정 정보 실시간 갱신
-    /*@RequestMapping("/roleName")
-    @ResponseBody
-    public List<RoleSeatDTO> roleName(@RequestParam int rcrbrd_num) throws IOException {
-        *//*ModelAndView mav = new ModelAndView();
-        mav.addObject("roleName", recruitDAO.roleName(rcrbrd_num));
-        return mav;*//*
-
-        List<RoleSeatDTO> list = new ArrayList<RoleSeatDTO>();
-        list = recruitDAO.roleName(rcrbrd_num);
-
-        return list;
-    } // roleName() end*/
-
     // 게시판 번호와 좌석 번호로 데이터가 존재하는지 확인
     @RequestMapping("/roleSeatCheck")
     @ResponseBody
     public int roleSeatCheck(@ModelAttribute RoleSeatDTO roleSeatDTO) {
-        int cnt = recruitDAO.roleSeatCheck(roleSeatDTO);
-        return cnt;
+        return recruitDAO.roleSeatCheck(roleSeatDTO);
     } // roleSeatCheck() end
 
     @RequestMapping("/getMoreContents")
     @ResponseBody
     public List<MoreDTO> getMoreContents(int startCount, int endCount, String order, String keyword) {
-        List<MoreDTO> list = new ArrayList<>();
-        List<MoreDTO> list2 = new ArrayList<>();
-        list = recruitDAO.getMoreContents(startCount, endCount, order, keyword);
-
-        for (int i = 0; i < list.size(); i++) {
-            MoreDTO moreDTO = new MoreDTO();
-            moreDTO.setRcrbrd_num(list.get(i).getRcrbrd_num());
-            moreDTO.setGm_code(list.get(i).getGm_code());
-            moreDTO.setGm_name(list.get(i).getGm_name());
-            moreDTO.setRcrbrd_subject(list.get(i).getRcrbrd_subject());
-            moreDTO.setRcrbrd_edate(list.get(i).getRcrbrd_edate());
-            moreDTO.setRcrbrd_max(list.get(i).getRcrbrd_max());
-            moreDTO.setCnt(recruitDAO.attendMembers(list.get(i).getRcrbrd_num()).size());
-
-            list2.add(i, moreDTO);
-        }
-        return list2;
+        return recruitDAO.getMoreContents(startCount, endCount, order, keyword);
     } // getMoreContents() end
-
-    /* 업데이트는 기능상 만들면 안 될 것 같다
-    @RequestMapping("/update")
-    public ModelAndView update(@RequestParam int rcrbrd_num, HttpSession session) {
-        ModelAndView mav = new ModelAndView();
-        String mem_id = (String) session.getAttribute("mem_id");
-        if (mem_id != null && !mem_id.equals("guest")) {
-            mav.addObject("detail", recruitDAO.detail(rcrbrd_num)); // 모집 정보 상세보기
-            mav.addObject("gameDetail", recruitDAO.gameDetail(rcrbrd_num)); // 게임 정보 상세보기
-            mav.addObject("roleList", recruitDAO.roleList(rcrbrd_num)); // 역할 테이블에서 역할 리스트 가져오기
-            mav.setViewName("/recruit/updateForm");
-        } else {
-            mav.setViewName("/mem/loginForm");
-        }
-        return mav;
-    } // update() end
-    */
 
     @RequestMapping("/delete")
     public String delete(@RequestParam int rcrbrd_num, HttpSession session) {
@@ -591,30 +522,12 @@ public class RecruitController {
         if (order == null || order.equals("")) {
             order = order2;
         }
-        // System.out.println("order : " + order);
-        // System.out.println("gs_keyword : " + gs_keyword);
+
         List<RecruitDTO> list = recruitDAO.list2(order, gs_keyword);
-        // System.out.println("list : " + list);
-        List<String> gameList = new ArrayList<>();
-        List<String> attendMembers = new ArrayList<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            dto = list.get(i);
-            int num = dto.getRcrbrd_num();
-            // 게임 이름 가져오기
-            gameList.add(recruitDAO.game(num));
-            // 참여한 모집원들 수
-            attendMembers.add(String.valueOf(recruitDAO.attendMembers(num).size()));
-
-            //System.out.println("num : " + num);
-            //System.out.println("게임 이름 : "+gameList.get(i));
-        }
 
         String mem_id = (String) session.getAttribute("mem_id");
         if (mem_id != null && !mem_id.equals("guest")) {
             mav.addObject("list", list);
-            mav.addObject("game", gameList);
-            mav.addObject("attendCount", attendMembers);
             mav.addObject("rcrKing", recruitDAO.rcrKing());
             mav.addObject("searchRank", recruitDAO.searchRank());
             // System.out.println(recruitDAO.rcrKing());
@@ -656,8 +569,7 @@ public class RecruitController {
     @RequestMapping("/gameList")
     @ResponseBody
     public List<GameDTO> gameList() {
-        List<GameDTO> list = recruitDAO.gm_list();
-        return list;
+        return recruitDAO.gm_list();
     }
 
     // 삭제 후 이메일 발송

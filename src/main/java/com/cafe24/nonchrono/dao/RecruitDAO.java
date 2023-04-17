@@ -114,56 +114,9 @@ public class RecruitDAO {
         }
     } // roleSeatCheck() end
 
-    public List<RecruitInfoDTO> attendMembers(int rcrbrd_num) {
-        return sqlSession.selectList("recruit.attendMembers", rcrbrd_num);
-    } // attendMembers() end
-
-    public Map<String, String> seatDetail(RecruitInfoDTO recruitInfoDTO) {
-        return sqlSession.selectOne("recruit.seatDetail", recruitInfoDTO);
+    public List<Map<String, Object>> seatDetail(int rcrbrd_num) {
+        return sqlSession.selectList("recruit.seatDetail", rcrbrd_num);
     }
-
-    public List<RecruitInfoDTO> memName(int rcrbrd_num) {
-        return sqlSession.selectList("recruit.memName", rcrbrd_num);
-    }
-
-    public List<String> memNick(int rcrbrd_num) {
-        int count = (int) sqlSession.selectOne("recruit.rcrbrdMax", rcrbrd_num);
-        // System.out.println(count);
-        List<String> list = new ArrayList<>();
-        RecruitInfoDTO recruitInfoDTO = new RecruitInfoDTO();
-        recruitInfoDTO.setRcrbrd_num(rcrbrd_num);
-        for (int i = 1; i <= count; i++) {
-            recruitInfoDTO.setRi_seat(i);
-            String nick = sqlSession.selectOne("recruit.memNick", recruitInfoDTO);
-            // System.out.println(nick);
-            if (nick != null) {
-                //System.out.println(nick.trim());
-                list.add(nick);
-            } else {
-                list.add("");
-            }
-        }
-        //System.out.println(list);
-        return list;
-    }
-
-    public List<String> memPic(int rcrbrd_num) {
-        int count = (int) sqlSession.selectOne("recruit.rcrbrdMax", rcrbrd_num);
-        List<String> list = new ArrayList<>();
-        RecruitInfoDTO recruitInfoDTO = new RecruitInfoDTO();
-        recruitInfoDTO.setRcrbrd_num(rcrbrd_num);
-        for (int i = 1; i <= count; i++) {
-            recruitInfoDTO.setRi_seat(i);
-            String pic = sqlSession.selectOne("recruit.memPic", recruitInfoDTO);
-            if (pic != null) {
-                list.add(pic.trim());
-            } else {
-                list.add("");
-            }
-        }
-        // System.out.println(list);
-        return list;
-    } // membersPic() end
 
     public List<Map<String, Object>> rcrKing() {
         return sqlSession.selectList("recruit.rcrKing");
@@ -180,7 +133,6 @@ public class RecruitDAO {
             map.put("keyword", keyword);
             return sqlSession.selectList("recruit.more2", map);
         }
-
     }
 
     public int delete(int rcrbrd_num) {
@@ -219,22 +171,6 @@ public class RecruitDAO {
         } else {
             return (int) integer;
         }
-    }
-
-    public List<String> memSeat(int rcrbrd_num) {
-        int count = (int) sqlSession.selectOne("recruit.rcrbrdMax", rcrbrd_num);
-        List<String> list = new ArrayList<>();
-        RecruitInfoDTO recruitInfoDTO = new RecruitInfoDTO();
-        recruitInfoDTO.setRcrbrd_num(rcrbrd_num);
-        for (int i = 1; i <= count; i++) {
-            recruitInfoDTO.setRi_seat(i);
-            if (sqlSession.selectOne("recruit.memSeat", recruitInfoDTO) != null) {
-                list.add(sqlSession.selectOne("recruit.memSeat", recruitInfoDTO));
-            } else {
-                list.add("");
-            }
-        }
-        return list;
     }
 
     public String heart(RatingDTO ratingDTO) {

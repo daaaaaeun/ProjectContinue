@@ -4,30 +4,46 @@
 <mapper namespace="recruit">
     <!-- 목록 출력 -->
     <select id="list" resultType="com.cafe24.nonchrono.dto.RecruitDTO">
-        SELECT rcrbrd_num,
-               mem_id,
-               rcrbrd_subject,
-               rcrbrd_content,
-               rcrbrd_pw,
-               rcrbrd_views,
-               rcrbrd_date,
-               rcrbrd_edate,
-               rcrbrd_ip,
-               gm_code,
-               rcrbrd_status,
-               rcrbrd_adr,
-               rcrbrd_max,
-               (SELECT count(*) FROM tb_comment where rcrbrd_num = rb.rcrbrd_num) as com_count,
+        SELECT rb.rcrbrd_num,
+               rb.mem_id,
+               rb.rcrbrd_subject,
+               rb.rcrbrd_edate,
+               rb.rcrbrd_max,
+               gm.gm_name,
+               (SELECT count(*) FROM tb_comment where rcrbrd_num = rb.rcrbrd_num) as com_count, /* 댓글 수 */
                (SELECT count(mem_id)
                 FROM tb_recruitinfo
-                where rcrbrd_num = rb.rcrbrd_num)                                 as cnt
+                where rcrbrd_num = rb.rcrbrd_num)                                 as cnt /* 참여자 수 */
         FROM tb_rcrboard rb
-        WHERE rcrbrd_status = '진행중'
-          AND rcrbrd_edate >= now()
+        LEFT JOIN tb_game gm ON rb.gm_code = gm.gm_code
+        WHERE rcrbrd_status = '진행중' AND rcrbrd_edate >= now()
         ORDER BY ${order} DESC
         Limit 9
     </select>
 
+    <!-- 키워드가 있을시 목록 출력 -->
+    <select id="list2" parameterType="java.util.Map" resultType="com.cafe24.nonchrono.dto.RecruitDTO">
+        SELECT rb.rcrbrd_num,
+               rb.mem_id,
+               rb.rcrbrd_subject,
+               rb.rcrbrd_edate,
+               rb.rcrbrd_max,
+               gm.gm_name,
+               (SELECT count(*) FROM tb_comment where rcrbrd_num = rb.rcrbrd_num) as com_count, /* 댓글 수 */
+               (SELECT count(mem_id)
+                FROM tb_recruitinfo
+                where rcrbrd_num = rb.rcrbrd_num)                                 as cnt /* 참여자 수 */
+        FROM tb_rcrboard rb
+                 JOIN tb_game gm
+                      ON rb.gm_code = gm.gm_code
+        WHERE rcrbrd_status = '진행중'
+          AND rcrbrd_edate >= now()
+          AND gm.gm_name LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY ${order} DESC
+        Limit 9
+    </select>
+
+    <!-- 정렬시 목록 출력 -->
     <select id="listAjax" resultType="com.cafe24.nonchrono.dto.MoreDTO">
         SELECT gm.gm_name,
                rb.rcrbrd_num,
@@ -40,10 +56,8 @@
                 FROM tb_recruitinfo
                 WHERE rcrbrd_num = rb.rcrbrd_num)                                 as cnt
         FROM tb_rcrboard rb
-                 join tb_game gm
-                      ON rb.gm_code = gm.gm_code
-        WHERE rcrbrd_status = '진행중'
-          AND rcrbrd_edate >= now()
+        LEFT JOIN tb_game gm ON rb.gm_code = gm.gm_code
+        WHERE rcrbrd_status = '진행중' AND rcrbrd_edate >= now()
         ORDER BY ${order} DESC
         Limit 9
     </select>
@@ -149,11 +163,12 @@
     </select>-->
 
     <!-- 좌석 번호에 맞는 좌석 정보 가져오기 (아이디, 닉네임, 프로필) -->
-    <select id="seatDetail" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO" resultType="java.util.LinkedHashMap">
-        SELECT ri.mem_id, mm.mem_nick, mm.mem_pic
+    <select id="seatDetail" parameterType="int" resultType="java.util.LinkedHashMap">
+        SELECT ri.ri_seat, ri.mem_id, mm.mem_nick, mm.mem_pic
         FROM tb_recruitinfo ri
         INNER JOIN tb_mem mm on ri.mem_id = mm.mem_id
-        WHERE ri.rcrbrd_num = #{rcrbrd_num} AND ri.ri_seat = #{ri_seat}
+        WHERE ri.rcrbrd_num = #{rcrbrd_num}
+        ORDER BY ri_seat
     </select>
 
     <!-- 멤버 아이디로 닉네임 가져오기 -->
@@ -253,45 +268,11 @@
           AND rs_seat = #{rs_seat}
     </select>
 
-    <!-- 참여한 멤버 리스트 불러오기 -->
-    <select id="attendMembers" parameterType="int" resultType="com.cafe24.nonchrono.dto.RecruitInfoDTO">
-        SELECT mem_id, ri_seat, ri_num
-        FROM tb_recruitinfo
-        WHERE rcrbrd_num = #{rcrbrd_num}
-    </select>
-
-    <!-- 자리당 아이디 조회 -->
-    <select id="memName" parameterType="int" resultType="com.cafe24.nonchrono.dto.RecruitInfoDTO">
-        SELECT mem_id, ri_seat
-        FROM tb_recruitinfo
-        WHERE rcrbrd_num = #{rcrbrd_num}
-    </select>
-
-    <!-- 자리당 닉네임 조회 -->
-    <select id="memNick" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO" resultType="String">
-        SELECT mm.mem_nick
-        FROM tb_recruitinfo as ri
-                 JOIN tb_mem as mm
-                      ON ri.mem_id = mm.mem_id
-        WHERE ri.rcrbrd_num = #{rcrbrd_num}
-          AND ri.ri_seat = #{ri_seat}
-    </select>
-
     <!-- 해당 게시물에 모집 최대 인원 조회 -->
     <select id="rcrbrdMax" parameterType="int" resultType="int">
         SELECT rcrbrd_max
         FROM tb_rcrboard
         WHERE rcrbrd_num = #{rcrbrd}
-    </select>
-
-    <!-- 자리당 이미지 조회 -->
-    <select id="memPic" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO" resultType="String">
-        SELECT mm.mem_pic
-        FROM tb_recruitinfo as ri
-                 JOIN tb_mem as mm
-                      ON ri.mem_id = mm.mem_id
-        WHERE ri.rcrbrd_num = #{rcrbrd_num}
-          AND ri.ri_seat = #{ri_seat}
     </select>
 
     <!-- 이번달 모집왕 -->
@@ -395,13 +376,6 @@
         VALUES (#{sc_word}, now(), '모집')
     </insert>
 
-    <select id="memSeat" parameterType="com.cafe24.nonchrono.dto.RecruitInfoDTO" resultType="String">
-        SELECT mem_id
-        FROM tb_recruitinfo
-        WHERE rcrbrd_num = #{rcrbrd_num}
-          AND ri_seat = #{ri_seat}
-    </select>
-
     <select id="heartCheck" parameterType="com.cafe24.nonchrono.dto.RatingDTO" resultType="int">
         SELECT count(*)
         FROM tb_rating
@@ -444,35 +418,6 @@
         SET buyer_bad = buyer_bad + 1
         WHERE mem_id = #{mem_id}
     </update>
-
-    <!-- 키워드가 있을시 목록 출력 -->
-    <select id="list2" parameterType="java.util.Map" resultType="com.cafe24.nonchrono.dto.RecruitDTO">
-        SELECT rcrbrd_num,
-               mem_id,
-               rcrbrd_subject,
-               rcrbrd_content,
-               rcrbrd_pw,
-               rcrbrd_views,
-               rcrbrd_date,
-               rcrbrd_edate,
-               rcrbrd_ip,
-               rb.gm_code,
-               rcrbrd_status,
-               rcrbrd_adr,
-               rcrbrd_max,
-               (SELECT count(*) FROM tb_comment where rcrbrd_num = rb.rcrbrd_num) as com_count,
-               (SELECT count(mem_id)
-                FROM tb_recruitinfo
-                where rcrbrd_num = rb.rcrbrd_num)                                 as cnt
-        FROM tb_rcrboard rb
-                 JOIN tb_game gm
-                      ON rb.gm_code = gm.gm_code
-        WHERE rcrbrd_status = '진행중'
-          AND rcrbrd_edate >= now()
-          AND gm.gm_name LIKE CONCAT('%', #{keyword}, '%')
-        ORDER BY ${order} DESC
-        Limit 9
-    </select>
 
     <!-- 키워드가 있을시 정렬하여 목록 보기 -->
     <select id="listAjax2" resultType="com.cafe24.nonchrono.dto.MoreDTO">

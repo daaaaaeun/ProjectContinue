@@ -510,35 +510,6 @@
 
     } // roleConfirm() end
 
-    // 실시간 갱신에 대한 내용
-    /*
-    $(document).ready(function roleName() {
-        $.ajax({
-            url: "/recruit/roleName",
-            type: "post",
-            data: {
-                "rcrbrd_num": ${detail.rcrbrd_num}
-            },
-            success: function (data) {
-                for (let i = 0; i < data.length; i++) {
-                    // $('#roleText' + data[i].rs_seat).text(data[i].rl_name);
-                    // console.log(i+"번째 좌석 : " + data[i].rs_seat);
-                    // console.log(i+"번째 이름 : " + data[i].rl_name);
-
-                    console.log(data);
-                }
-            },
-            error: function (request,status,error) {
-                console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-            }
-        });
-
-        let timer = setTimeout(function () {
-            roleName();
-        }, 500);
-    });
-    */
-
     $(document).ready(function () {
         for (let i = 1; i <= ${detail.rcrbrd_max}; i++) {
             $.ajax({
@@ -577,15 +548,6 @@
         }
 
     });
-
-    /*function updateConfirm(form) {
-        if (confirm("수정하시겠습니까?")) {
-            form.action = "/recruit/update";
-            form.submit();
-        } else {
-            location.href = "#";
-        }
-    }*/
 
     function deleteConfirm(form) {
         if (confirm("정말로 삭제하시겠습니까?")) {
