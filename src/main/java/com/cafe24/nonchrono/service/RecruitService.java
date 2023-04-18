@@ -20,17 +20,22 @@ public class RecruitService {
         List<Map<String, Object>> tempList = recruitDAO.seatDetail(rcrbrd_num);
         List<Map<String, String>> list = new ArrayList<>();
         int idx = 0;
-        int seatNum = (int) tempList.get(idx).get("ri_seat")-1; // 좌석 번호 인덱스화
+        int listSize = tempList.size();
+        int seatNum = -1; // seatNum이 -1이라면 아래의 반복문에서 절대 i와 같을 수 없다.
+
+        if (idx < listSize) { // listSize가 0이 아닐 경우
+            seatNum = (int) tempList.get(idx).get("ri_seat")-1; // 좌석 번호 인덱스화
+        }
 
         for (int i = 0; i < rcrbrd_max; i++) {
             Map<String, String> tempMap = new LinkedHashMap<>();
 
-            if (i == seatNum) {
+            if (i == seatNum) { // 좌석 번호와 동일한 순서에
                 tempMap.put("mem_id", (String) tempList.get(idx).get("mem_id"));
                 tempMap.put("mem_nick", (String) tempList.get(idx).get("mem_nick"));
                 tempMap.put("mem_pic", (String) tempList.get(idx).get("mem_pic"));
                 idx++;
-                if (idx < tempList.size()) seatNum = (int) tempList.get(idx).get("ri_seat")-1;
+                if (idx < listSize) seatNum = (int) tempList.get(idx).get("ri_seat")-1;
             } else {
                 tempMap.put("mem_id", "");
                 tempMap.put("mem_nick", "");
