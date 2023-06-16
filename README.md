@@ -35,13 +35,13 @@ Server : Apache Tomcat
 
 - **Github**
 
-: [https://github.com/daaaaaeun/ProjectContinue](https://github.com/Nonchrono/ProjectContinue)
+: [https://github.com/daaaaaeun/ProjectContinue](https://github.com/daaaaaeun/ProjectContinue)
 
 </br>
 
 - **호스팅**
 
-: [http://ed040820.cafe24.com](http://nonchrono.cafe24.com)
+: [http://ed040820.cafe24.com](http://ed040820.cafe24.com)
 
  
 </br>
