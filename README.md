@@ -5,23 +5,23 @@
 
 </br>
 
-- **프로젝트 주제**
+- **한 줄 소개**
 
-
-
-</br>
-
-- **프로젝트 기간 & 인원 & 역할**
-
-: 2022.11.16 ~ 2022.12.26 - 4인 / 팀장
-
-모집 게시판과 출석체크 미니게임, 관리자 페이지의 크롤링 파트 담당 (Jsoup 이용)
-
-그 외에도 팀장으로서 일정 분배와 파트 분배, Git 관리, 기술 자문, 로고 제작 등을 하였습니다.
+콘솔 게임 오픈 마켓 및 모집 게시판
 
 </br>
 
-- **사용 기술**
+- **제작 기간**
+
+2022.11.16 ~ 2022.12.26
+
+- **팀 구성**
+
+4명
+
+</br>
+
+- **사용 Skill**
 
 Frontend : HTML, CSS, Javascript, jQuery, JSTL, Bootstrap
 
@@ -35,13 +35,13 @@ Server : Apache Tomcat
 
 - **Github**
 
-: [https://github.com/Nonchrono/ProjectContinue](https://github.com/Nonchrono/ProjectContinue)
+: [https://github.com/daaaaaeun/ProjectContinue](https://github.com/Nonchrono/ProjectContinue)
 
 </br>
 
 - **호스팅**
 
-: [http://nonchrono.cafe24.com](http://nonchrono.cafe24.com)
+: [http://ed040820.cafe24.com](http://nonchrono.cafe24.com)
 
  
 </br>
