@@ -1,7 +1,7 @@
 <%@ page import="java.io.File" %>
 <%@ page import="org.springframework.util.ResourceUtils" %>
-<%@ page import="com.cafe24.nonchrono.dto.MemDTO" %>
-<%@ page import="com.cafe24.nonchrono.dao.MemDAO" %>
+<%@ page import="com.cafe24.ed040820.dto.MemDTO" %>
+<%@ page import="com.cafe24.ed040820.dao.MemDAO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../header.jsp"></jsp:include>

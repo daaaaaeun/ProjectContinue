@@ -76,10 +76,17 @@
                                 </label>
                             </div>
                             <br>
+                            <div class="text-center">
+                                <input type="hidden" id="evt_num" name="evt_num" value="${evtdetail.evt_num}">
+                                <button type="submit" class="btn btn-outline-primary" id="evtbutton">
+                                    등록
+                                </button>
+                                <input type="reset" class="btn btn-outline-danger" disabled="disabled">
+                            </div>
                             <!-- End General Form Elements -->
-                            <input type="hidden" id="evt_num" name="evt_num" value="${evtdetail.evt_num}">
+                            <%--<input type="hidden" id="evt_num" name="evt_num" value="${evtdetail.evt_num}">
                             <button type="submit" class="btn btn-info" >등록</button>
-                            <input type="reset" class="btn btn-outline-danger" disabled="disabled">
+                            <input type="reset" class="btn btn-outline-danger" disabled="disabled">--%>
                         </form>
                     </div>
                 </div>
