@@ -38,14 +38,14 @@
                                 <div class="col-sm-10">
                                     <select class="form-select" aria-label="Default select example" id="dt_prog" name="dt_prog">
                                         <option value="" selected>전체</option>
-                                        <option value="J01">결제완료</option>
-                                        <option value="J02">출고준비중</option>
-                                        <option value="J03">출고완료</option>
-                                        <option value="J04">배송중</option>
-                                        <option value="J05">배송완료</option>
-                                        <option value="J06">구매확정</option>
-                                        <option value="J07">교환</option>
-                                        <option value="J08">반품</option>
+                                        <option value="결제완료">결제완료</option>
+                                        <option value="출고준비중">출고준비중</option>
+                                        <option value="출고완료">출고완료</option>
+                                        <option value="배송중">배송중</option>
+                                        <option value="배송완료">배송완료</option>
+                                        <option value="구매확정">구매확정</option>
+                                        <option value="교환">교환</option>
+                                        <option value="반품">반품</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,28 +122,28 @@
                                     </c:if>
                                     <ul class="pagination">
                                         <li class="page-item">
-                                        <c:if test="${startPage>0}">
-                                            <a class="page-link" href="/seller/order?pageNum=${startPage}}" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </c:if>
+                                            <c:if test="${startPage>0}">
+                                                <a class="page-link" href="/seller/order?pageNum=${startPage}}" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </c:if>
                                         </li>
                                         <c:forEach var="i" begin="${startPage+1}" end="${endPage-1}">
                                             <c:choose>
-                                                <c:when test="${pageNum==i}"><li class="page-item"><a class="page-link">${i}</a></li></c:when>
-                                                <c:when test="${pageNum!=i}"><li class="page-item"><a class="page-link" href="/seller/order?pageNum=${i}">${i}<input type="hidden" id="pageNum" name="pageNum" value="${i}"></a></li></c:when>
-<%--                                                <c:when test="${pageNum!=i}"><li class="page-item"><a class="page-link" onclick="next()">${i}<input type="hidden" id="pageNum" name="pageNum" value="${i}"></a></li></c:when>--%>
+                                                <c:when test="${pageNum==i}"><li class="page-item"><a class="page-link">${i}</a><input type="hidden" id="pageNum" name="pageNum" value="${i}"></li></c:when>
+                                                <c:when test="${pageNum!=i}"><li class="page-item"><a class="page-link" href="/seller/order?pageNum=${i}">${i}</a></li></c:when>
+                                                <%--                                                <c:when test="${pageNum!=i}"><li class="page-item"><a class="page-link" onclick="next()">${i}<input type="hidden" id="pageNum" name="pageNum" value="${i}"></a></li></c:when>--%>
                                             </c:choose>
                                         </c:forEach>
                                         <c:if test="${endpage<=pageCount}">
-                                        <li class="page-item">
-                                            <a class="page-link" onclick="nextPage(${startPage+11})" href="/seller/order?pageNum=${startPage+11}" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-<%--                                            </a>--%>
-<%--                                            <a class="page-link" href="/seller/order?pageNum=${startPage+11}" aria-label="Next">--%>
-<%--                                                <span aria-hidden="true">&raquo;</span>--%>
-<%--                                            </a>--%>
-                                        </li>
+                                            <li class="page-item">
+                                                <a class="page-link" onclick="nextPage(${startPage+11})" href="/seller/order?pageNum=${startPage+11}" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                        <%--                                            </a>--%>
+                                                        <%--                                            <a class="page-link" href="/seller/order?pageNum=${startPage+11}" aria-label="Next">--%>
+                                                        <%--                                                <span aria-hidden="true">&raquo;</span>--%>
+                                                        <%--                                            </a>--%>
+                                            </li>
                                         </c:if>
                                     </ul>
                                 </nav>
@@ -164,14 +164,13 @@
         // let query = window.location.search;
         // let param = new URLSearchParams(query);
         let pageNum = $("#pageNum1").val();
+        // alert(pageNum);
         $("#pageNum").val(pageNum);
         $("#form1").submit();
     }
-
     function next() {
         $("#form1").submit();
     }
-
     function nextPage(pageNum) {
         $("#pageNum").val(pageNum);
         $("#form1").submit();

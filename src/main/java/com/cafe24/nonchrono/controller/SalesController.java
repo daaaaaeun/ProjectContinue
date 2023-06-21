@@ -40,8 +40,9 @@ public class SalesController {
 
     //상품 메인
     @RequestMapping("/sales")
-    public ModelAndView list(HttpServletRequest req, PagingDTO pagingDTO, String order) {
+    public ModelAndView list(HttpServletRequest req, PagingDTO pagingDTO, String order, HttpSession session) {
         ModelAndView mav = new ModelAndView();
+        String mem_id = (String) session.getAttribute("mem_id");
         mav.setViewName("sales/sales");
 
         int totalRowCount = salesDAO.totalRowCount(); //총 글갯수  6 |  52개
@@ -280,7 +281,7 @@ public class SalesController {
     }
 
     @RequestMapping("/pay")
-    public String pay(HttpSession session, @ModelAttribute MemdvDTO memdvDTO, @ModelAttribute OrderDTO orderDTO, @ModelAttribute BasketDTO basketDTO, @ModelAttribute DetailDTO detailDTO, @RequestParam(required = false) String pay_method) {
+    public String pay(HttpSession session, @ModelAttribute MemdvDTO memdvDTO, @ModelAttribute OrderDTO orderDTO, @ModelAttribute BasketDTO basketDTO, @ModelAttribute DetailDTO detailDTO, @RequestParam(required = false) String pay_method, @RequestParam int totalPay) {
         CouponlistDTO couponlistDTO = new CouponlistDTO();
         String mem_id = (String) session.getAttribute("mem_id");
         if (memdvDTO.getMem_dvnum() == 0) {
@@ -323,7 +324,8 @@ public class SalesController {
 
 
         // 총액 가져오기
-        int total = basketDAO.total(mem_id);
+//        int total = basketDAO.total(mem_id);
+        int total = totalPay;
 
         // 장바구니의 상품 총액 조회 (10만원 이상시 배송비 무료)
         if (total > 100000) {

@@ -53,22 +53,21 @@
 
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="/images/002.jpg">
+<section class="breadcrumb-section set-bg" data-setbg="/images/recruit_banner.png">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb__text">
-                    <h2>장바구니</h2>
+                    <h2>주문서</h2>
                     <div class="breadcrumb__option">
                         <a href="/">Home</a>
-                        <span>장바구니</span>
+                        <span>주문서</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Breadcrumb Section End -->
 
 <form action="/sales/pay" id="checkout" method="post">
     <input type="hidden" id="mem_id" name="mem_id" value="<%=session.getAttribute("mem_id")%>">
@@ -337,6 +336,7 @@
                             </c:choose>
                             </span>
                             </div>
+                            <input type="hidden" id="totalPay" name="totalPay" value="">
                             <div class="checkout__order__total">Total <span id="payment"
                                                                             name="payment"><fmt:formatNumber
                                     type="currency"
@@ -490,8 +490,9 @@
     <%-- 결제 API  --%>
 
     function requestPay() {
-        let total = ${bk_total + max_fee + mileage};
-        alert("결제 성공");
+        let total = $('#payment').text();
+        $("#totalPay").val(total);
+        // alert("결제 성공");
         IMP.init('imp62827174')
         //IMP.reqeust_pay(param, callback) 결제창 호출
         IMP.request_pay({

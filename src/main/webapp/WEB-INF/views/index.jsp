@@ -56,6 +56,10 @@
             background: #fd1c1c;
             border-color: #fd1c1c;
         }
+        .owl-carousel .owl-item img {
+            width: 110px;
+        }
+
     </style>
 
 </head>
@@ -118,13 +122,15 @@
                     <div class="header__top__right">
                         <div class="header__top__right__social">
                             <% if (session.getAttribute("sl_id") != null) { %>
-                            <a href="/seller">판매자 모드</a>
+                            <a href="/seller/seller">판매자 모드</a>
                             <% } else if (session.getAttribute("admin_id") != null) { %>
                             <a href="/admin">관리자 모드</a>
                             <% } %>
                             <c:choose>
-                                <c:when test="${mem_id == null}"><a href="/mem/login">로그인</a></c:when>
-                                <c:otherwise><a href="/mem/logout">로그아웃</a></c:otherwise>
+                                <c:when test="${mem_id == null and sl_id == null}"><a href="/mem/login">로그인</a></c:when>
+                                <c:when test="${mem_id != null and sl_id == null}"><a href="/mem/logout">로그아웃</a></c:when>
+                                <c:when test="${mem_id == null and sl_id != null}"><a href="/seller/logout">로그아웃</a></c:when>
+                                <c:when test="${mem_id != null and sl_id != null}"><a href="/seller/masterLogout">로그아웃</a></c:when>
                             </c:choose>
                             <a href="/mem/signup">회원가입</a>
                         </div>
@@ -185,17 +191,17 @@
                         <span>카테고리</span>
                     </div>
                     <ul>
-                        <li><a href="#">본체</a></li>
-                        <li><a href="#">타이틀 (패키지)</a></li>
-                        <li><a href="#">타이틀 (다운로드)</a></li>
-                        <li><a href="#">다운로드 추가 컨텐츠 (DLC)</a></li>
-                        <li><a href="#">온라인 이용권</a></li>
-                        <li><a href="#">선불 번호</a></li>
-                        <li><a href="#">무료 컨텐츠</a></li>
-                        <li><a href="#">아미보</a></li>
-                        <li><a href="#">프로컨트롤러</a></li>
-                        <li><a href="#">조이콘</a></li>
-                        <li><a href="#">주변 기기</a></li>
+                        <li><a href="/sales/search?ctg=mn&sc_where=sales&keyword=">본체</a></li>
+                        <li><a href="/sales/search?ctg=pt&sc_where=sales&keyword=">타이틀 (패키지)</a></li>
+                        <li><a href="/sales/search?ctg=dt&sc_where=sales&keyword=">타이틀 (다운로드)</a></li>
+                        <li><a href="/sales/search?ctg=dl&sc_where=sales&keyword=">다운로드 추가 컨텐츠 (DLC)</a></li>
+                        <li><a href="/sales/search?ctg=ol&sc_where=sales&keyword=">온라인 이용권</a></li>
+                        <li><a href="/sales/search?ctg=pn&sc_where=sales&keyword=">선불 번호</a></li>
+                        <li><a href="/sales/search?ctg=fc&sc_where=sales&keyword=">무료 컨텐츠</a></li>
+                        <li><a href="/sales/search?ctg=am&sc_where=sales&keyword=">아미보</a></li>
+                        <li><a href="/sales/search?ctg=pc&sc_where=sales&keyword=">프로컨트롤러</a></li>
+                        <li><a href="/sales/search?ctg=jc&sc_where=sales&keyword=">조이콘</a></li>
+                        <li><a href="/sales/search?ctg=ac&sc_where=sales&keyword=">주변 기기</a></li>
                     </ul>
                 </div>
             </div>
@@ -205,18 +211,19 @@
                         <form action="/sales/search">
                             <select id="ctg" name="ctg">
                                 <option value="ALL" selected>모든 카테고리</option>
-                                <option value="MN">본체</option>
-                                <option value="PT">타이틀(패키지)</option>
-                                <option value="DT">타이틀(다운로드)</option>
-                                <option value="DL">다운로드 추가 컨텐츠 (DLC)</option>
-                                <option value="OL">온라인 이용권</option>
-                                <option value="PN">선불 번호</option>
-                                <option value="FC">무료 컨텐츠</option>
-                                <option value="AM">아미보</option>
-                                <option value="PC">프로컨트롤러</option>
-                                <option value="JC">조이콘</option>
-                                <option value="AC">주변 기기</option>
+                                <option value="mn">본체</option>
+                                <option value="pt">타이틀(패키지)</option>
+                                <option value="dt">타이틀(다운로드)</option>
+                                <option value="dl">다운로드 추가 컨텐츠 (DLC)</option>
+                                <option value="ol">온라인 이용권</option>
+                                <option value="pn">선불 번호</option>
+                                <option value="fc">무료 컨텐츠</option>
+                                <option value="am">아미보</option>
+                                <option value="pc">프로컨트롤러</option>
+                                <option value="jc">조이콘</option>
+                                <option value="ac">주변 기기</option>
                             </select>
+                            <input type="hidden" id="sc_where" name="sc_where" value="sales">
                             <input class="search_keyword" type="text" id="keyword" name="keyword">
                             <button type="submit" class="site-btn-search">검색</button>
                         </form>
@@ -342,7 +349,7 @@
                         <div class="latest-prdouct__slider__item">
                             <a href="/sales/detail/${idxLatestProduct[0].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxLatestProduct[0].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxLatestProduct[0].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxLatestProduct[0].ss_name}</h6>
@@ -351,7 +358,7 @@
                             </a>
                             <a href="/sales/detail/${idxLatestProduct[1].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxLatestProduct[1].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxLatestProduct[1].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxLatestProduct[1].ss_name}</h6>
@@ -360,7 +367,7 @@
                             </a>
                             <a href="/sales/detail/${idxLatestProduct[2].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxLatestProduct[2].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxLatestProduct[2].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxLatestProduct[2].ss_name}</h6>
@@ -371,7 +378,7 @@
                         <div class="latest-prdouct__slider__item">
                             <a href="/sales/detail/${idxLatestProduct[3].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxLatestProduct[3].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxLatestProduct[3].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxLatestProduct[3].ss_name}</h6>
@@ -380,7 +387,7 @@
                             </a>
                             <a href="/sales/detail/${idxLatestProduct[4].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxLatestProduct[4].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxLatestProduct[4].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxLatestProduct[4].ss_name}</h6>
@@ -389,7 +396,7 @@
                             </a>
                             <a href="/sales/detail/${idxLatestProduct[5].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxLatestProduct[5].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxLatestProduct[5].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxLatestProduct[5].ss_name}</h6>
@@ -407,7 +414,7 @@
                         <div class="latest-prdouct__slider__item">
                             <a href="/sales/detail/${idxTopProduct[0].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxTopProduct[0].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxTopProduct[0].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxTopProduct[0].ss_name}</h6>
@@ -416,7 +423,7 @@
                             </a>
                             <a href="/sales/detail/${idxTopProduct[1].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxTopProduct[1].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxTopProduct[1].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxTopProduct[1].ss_name}</h6>
@@ -425,7 +432,7 @@
                             </a>
                             <a href="/sales/detail/${idxTopProduct[2].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxTopProduct[2].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxTopProduct[2].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxTopProduct[2].ss_name}</h6>
@@ -436,7 +443,7 @@
                         <div class="latest-prdouct__slider__item">
                             <a href="/sales/detail/${idxTopProduct[3].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxTopProduct[3].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxTopProduct[3].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxTopProduct[3].ss_name}</h6>
@@ -445,7 +452,7 @@
                             </a>
                             <a href="/sales/detail/${idxTopProduct[4].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxTopProduct[4].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxTopProduct[4].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxTopProduct[4].ss_name}</h6>
@@ -454,7 +461,7 @@
                             </a>
                             <a href="/sales/detail/${idxTopProduct[5].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxTopProduct[5].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxTopProduct[5].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxTopProduct[5].ss_name}</h6>
@@ -472,7 +479,7 @@
                         <div class="latest-prdouct__slider__item">
                             <a href="/sales/detail/${idxReviewProduct[0].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxReviewProduct[0].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxReviewProduct[0].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxReviewProduct[0].ss_name}</h6>
@@ -481,7 +488,7 @@
                             </a>
                             <a href="/sales/detail/${idxReviewProduct[1].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxReviewProduct[1].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxReviewProduct[1].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxReviewProduct[1].ss_name}</h6>
@@ -490,7 +497,7 @@
                             </a>
                             <a href="/sales/detail/${idxReviewProduct[2].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxReviewProduct[2].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxReviewProduct[2].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxReviewProduct[2].ss_name}</h6>
@@ -501,7 +508,7 @@
                         <div class="latest-prdouct__slider__item">
                             <a href="/sales/detail/${idxReviewProduct[3].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxReviewProduct[3].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxReviewProduct[3].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxReviewProduct[3].ss_name}</h6>
@@ -510,7 +517,7 @@
                             </a>
                             <a href="/sales/detail/${idxReviewProduct[4].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxReviewProduct[4].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxReviewProduct[4].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxReviewProduct[4].ss_name}</h6>
@@ -519,7 +526,7 @@
                             </a>
                             <a href="/sales/detail/${idxReviewProduct[5].ss_num}" class="latest-product__item">
                                 <div class="latest-product__item__pic">
-                                    <img src="/images/product/${idxReviewProduct[5].ss_img}" alt="">
+                                    <img class="productImg" src="/images/product/sales_main/${idxReviewProduct[5].ss_img}" alt="">
                                 </div>
                                 <div class="latest-product__item__text">
                                     <h6>${idxReviewProduct[5].ss_name}</h6>
@@ -554,7 +561,7 @@
                     <div class="blog__item__text"><a href="/recruit/detail/${idxrcrbrd[0].rcrbrd_num}">
                         <ul>
                             <li><i class="fa fa-calendar-o"></i> ${idxrcrbrd[0].rcrbrd_edate}</li>
-                            <li><i class="fa fa-comment-o"></i> ${idxrcrbrdCount[0]}</li>
+                            <li><i class="fa fa-user"></i> ${idxrcrbrdCount[0]}</li>
                         </ul>
                         <h5>${idxrcrbrd[0].rcrbrd_subject}</h5>
                     </a></div>
@@ -568,7 +575,7 @@
                     <div class="blog__item__text"><a href="/recruit/detail/${idxrcrbrd[1].rcrbrd_num}">
                         <ul>
                             <li><i class="fa fa-calendar-o"></i> ${idxrcrbrd[1].rcrbrd_edate}</li>
-                            <li><i class="fa fa-comment-o"></i> ${idxrcrbrdCount[1]}</li>
+                            <li><i class="fa fa-user"></i> ${idxrcrbrdCount[1]}</li>
                         </ul>
                         <h5>${idxrcrbrd[1].rcrbrd_subject}</h5>
                     </a></div>
@@ -582,7 +589,7 @@
                     <div class="blog__item__text"><a href="/recruit/detail/${idxrcrbrd[2].rcrbrd_num}">
                         <ul>
                             <li><i class="fa fa-calendar-o"></i> ${idxrcrbrd[2].rcrbrd_edate}</li>
-                            <li><i class="fa fa-comment-o"></i> ${idxrcrbrdCount[2]}</li>
+                            <li><i class="fa fa-user"></i> ${idxrcrbrdCount[2]}</li>
                         </ul>
                         <h5>${idxrcrbrd[2].rcrbrd_subject}</h5>
                     </a></div>

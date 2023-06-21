@@ -265,6 +265,19 @@ public class SellerController {
         return mav;
     }//loginProc() end
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpSession session) {
+        session.removeAttribute("sl_id");
+        session.removeAttribute("sl_pw");
+        return "redirect:/";
+    }
+
+    @RequestMapping("/masterLogout")
+    public String masterLogout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
+
     //회원가입
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String signProc(@ModelAttribute SellerDTO dto) {
@@ -558,7 +571,7 @@ public class SellerController {
         String result = "";
         for (int i=0; i<list.size(); i++){
             result += "<tr>";
-            result += "     <th scope=\"row\"><a href=\"#\"><img src=\"/imagese/product/sales_main/" + list.get(i).get("ss_img") + "\"></a></th>";
+            result += "     <th scope=\"row\"><a href=\"#\"><img src=\"/images/product/sales_main/" + list.get(i).get("ss_img") + "\"></a></th>";
             result += "     <td><a href=\"#\" class=\"text-primary fw-bold\">" + list.get(i).get("ss_name") + "</a></td>";
             result += "     <td>" + list.get(i).get("ss_price") + "</td>";
             result += "     <td class=\"fw-bold\">" + list.get(i).get("cnt") + "</td>";
@@ -577,7 +590,7 @@ public class SellerController {
         String result = "";
         for (int i=0; i<list.size(); i++){
             result += "<tr>";
-            result += "     <th scope=\"row\"><a href=\"#\"><img src=\"/imagese/product/sales_main/" + list.get(i).get("ss_img") + "\"></a></th>";
+            result += "     <th scope=\"row\"><a href=\"#\"><img src=\"/images/product/sales_main/" + list.get(i).get("ss_img") + "\"></a></th>";
             result += "     <td><a href=\"#\" class=\"text-primary fw-bold\">" + list.get(i).get("ss_name") + "</a></td>";
             result += "     <td>" + list.get(i).get("ss_price") + "</td>";
             result += "     <td class=\"fw-bold\">" + list.get(i).get("cnt") + "</td>";
@@ -596,7 +609,7 @@ public class SellerController {
         String result = "";
         for (int i=0; i<list.size(); i++){
             result += "<tr>";
-            result += "     <th scope=\"row\"><a href=\"#\"><img src=\"/imagese/product/sales_main/" + list.get(i).get("ss_img") + "\"></a></th>";
+            result += "     <th scope=\"row\"><a href=\"#\"><img src=\"/images/product/sales_main/" + list.get(i).get("ss_img") + "\"></a></th>";
             result += "     <td><a href=\"#\" class=\"text-primary fw-bold\">" + list.get(i).get("ss_name") + "</a></td>";
             result += "     <td>" + list.get(i).get("ss_price") + "</td>";
             result += "     <td class=\"fw-bold\">" + list.get(i).get("cnt") + "</td>";
@@ -716,13 +729,13 @@ public class SellerController {
 
     @RequestMapping("/orderSearch")
     public ModelAndView orderSearch(@RequestParam String dt_prog, @RequestParam String ss_speriod, @RequestParam String ss_eperiod,
-                                    @RequestParam String inputState, @RequestParam String keyword, @RequestParam String pageNum,
+                                    @RequestParam String inputState, @RequestParam String keyword, @RequestParam(required = false) String pageNum,
                                     PagingDTO pagingDTO, HttpSession session) {
         ModelAndView mav = new ModelAndView();
         String sl_id = (String) session.getAttribute("sl_id");
         String result = "";
 
-//        System.out.println("dt_prog : " + dt_prog);
+        System.out.println("dt_prog : " + dt_prog);
 //        System.out.println("ss_speriod : " + ss_speriod);
 //        System.out.println("ss_eperiod : " + ss_eperiod);
 //        System.out.println("inputState : " + inputState);
@@ -739,6 +752,7 @@ public class SellerController {
         } else {
             inputState = "";
         }
+//        System.out.println("if 후 inputState : " + inputState);
 
         pagingDTO.setSl_id(sl_id);
         pagingDTO.setDt_prog(dt_prog);
@@ -750,54 +764,54 @@ public class SellerController {
 
         if (dt_prog!="" && ss_speriod=="" && ss_eperiod=="" && inputState=="" && keyword=="") { //진행상태
             totalRowCount = sellerDAO.progTotalRowCount(pagingDTO);
-//            System.out.println("progTotalRowCount");
+            System.out.println("progTotalRowCount");
         } else if (dt_prog=="" && ss_speriod!="" && ss_eperiod=="" && inputState=="" && keyword=="") { //시작일
             totalRowCount = sellerDAO.speriodTotalRowCount(pagingDTO);
-//            System.out.println("speriodTotalRowCount");
+            System.out.println("speriodTotalRowCount");
         } else if (dt_prog=="" && ss_speriod=="" && ss_eperiod!="" && inputState=="" && keyword=="") { //종료일
             totalRowCount = sellerDAO.eperiodTotalRowCount(pagingDTO);
-//            System.out.println("eperiodTotalRowCount");
+            System.out.println("eperiodTotalRowCount");
         } else if (dt_prog=="" && ss_speriod!="" && ss_eperiod!="" && inputState=="" && keyword=="") { //시작&종료일
             totalRowCount = sellerDAO.spepTotalRowCount(pagingDTO);
-//            System.out.println("spepTotalRowCount");
+            System.out.println("spepTotalRowCount");
         } else if (dt_prog=="" && ss_speriod=="" && ss_eperiod=="" && inputState!="" && keyword!="") { //조건
             totalRowCount = sellerDAO.ikTotalRowCount(pagingDTO);
-//            System.out.println("ikTotalRowCount");
+            System.out.println("ikTotalRowCount");
         } else if (dt_prog!="" && ss_speriod!="" && ss_eperiod=="" && inputState=="" && keyword=="") { //진행상태, 시작일
             totalRowCount = sellerDAO.psTotalRowCount(pagingDTO);
-//            System.out.println("psTotalRowCount");
+            System.out.println("psTotalRowCount");
         } else if (dt_prog!="" && ss_speriod=="" && ss_eperiod!="" && inputState=="" && keyword=="") { //진행상태, 종료일
             totalRowCount = sellerDAO.peTotalRowCount(pagingDTO);
-//            System.out.println("peTotalRowCount");
+            System.out.println("peTotalRowCount");
         } else if (dt_prog!="" && ss_speriod!="" && ss_eperiod!="" && inputState=="" && keyword=="") { //진행상태, 시작&종료
             totalRowCount = sellerDAO.pseTotalRowCount(pagingDTO);
-//            System.out.println("pseTotalRowCount");
+            System.out.println("pseTotalRowCount");
         } else if (dt_prog!="" && ss_speriod=="" && ss_eperiod=="" && inputState!="" && keyword!="") { //진행상태, 조건
             totalRowCount = sellerDAO.pikTotalRowCount(pagingDTO);
-//            System.out.println("pikTotalRowCount");
+            System.out.println("pikTotalRowCount");
         } else if (dt_prog=="" && ss_speriod!="" && ss_eperiod=="" && inputState!="" && keyword!="") { //시작일, 조건
             totalRowCount = sellerDAO.sikTotalRowCount(pagingDTO);
-//            System.out.println("sikTotalRowCount");
+            System.out.println("sikTotalRowCount");
         } else if (dt_prog=="" && ss_speriod=="" && ss_eperiod!="" && inputState!="" && keyword!="") { //죵료일, 조건
             totalRowCount = sellerDAO.eikTotalRowCount(pagingDTO);
-//            System.out.println("eikTotalRowCount");
+            System.out.println("eikTotalRowCount");
         } else if (dt_prog=="" && ss_speriod!="" && ss_eperiod!="" && inputState!="" && keyword!="") { //시작&종료일 조건
             totalRowCount = sellerDAO.seikTotalRowCount(pagingDTO);
-//            System.out.println("seikTotalRowCount");
+            System.out.println("seikTotalRowCount");
         } else if (dt_prog!="" && ss_speriod!="" && ss_eperiod=="" && inputState!="" && keyword!="") { //진행상태, 시작일, 조건
             totalRowCount = sellerDAO.psikTotalRowCount(pagingDTO);
-//            System.out.println("psikTotalRowCount");
+            System.out.println("psikTotalRowCount");
         } else if (dt_prog!="" && ss_speriod=="" && ss_eperiod!="" && inputState!="" && keyword!="") { //진행상태, 종료일, 조건
             totalRowCount = sellerDAO.peikTotalRowCount(pagingDTO);
-//            System.out.println("peikTotalRowCount");
+            System.out.println("peikTotalRowCount");
         } else if (dt_prog!="" && ss_speriod!="" && ss_eperiod!="" && inputState!="" && keyword!="") { //진행상태, 시작&종료일, 조건
             totalRowCount = sellerDAO.pseikTotalRowCount(pagingDTO);
-//            System.out.println("pseikTotalRowCount");
+            System.out.println("pseikTotalRowCount");
         } else { //전체
             totalRowCount = sellerDAO.fullTotalRowCount(pagingDTO);
-//            System.out.println("fullTotalRowCount");
+            System.out.println("fullTotalRowCount");
         }
-//        System.out.println("totalRowCount : " + totalRowCount);
+        System.out.println("totalRowCount : " + totalRowCount);
 
         //페이징
         int numPerPage = 5; //한 페이지당 레코드 갯수
@@ -806,7 +820,7 @@ public class SellerController {
         //처음 list로 이동 시 pageNum은 null이다. 따라서 if문에 의해 pageNum이 1이 된다.
         //페이지 이동할때 list.do?pageNum= 로 pageNum값을 넘겨줌
 //        String pageNum = request.getParameter("pageNum");
-        if(pageNum=="") {
+        if(pageNum==null) {
             pageNum = "1";
         }//if end
 //        System.out.println(pageNum);
@@ -878,6 +892,11 @@ public class SellerController {
         mav.addObject("startPage", startPage);
         mav.addObject("endPage", endPage);
         mav.addObject("progSearch", progSearch);
+        mav.addObject("dt_prog", dt_prog);
+        mav.addObject("ss_speriod", ss_speriod);
+        mav.addObject("ss_eperiod", ss_eperiod);
+        mav.addObject("inputState", inputState);
+        mav.addObject("keyword", keyword);
         mav.setViewName("seller/orderSearch");
         return mav;
     }

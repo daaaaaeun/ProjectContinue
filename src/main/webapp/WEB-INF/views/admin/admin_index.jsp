@@ -251,7 +251,7 @@
                     </a>
                 </li>
                 <li>
-                    <a onclick="gameCrawling()">
+                    <a onclick="gameCrawling()" style="cursor: pointer">
                         <i class="bi bi-circle"></i><span>품목 자동 등록</span>
                     </a>
                 </li>
@@ -709,47 +709,47 @@
                                         // shape: 'circle',
                                         indicator: [{
                                             name: '본체',
-                                            max: 3000000
+                                            max: 100000
                                         },
                                             {
                                                 name: '타이틀(패키지)',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '타이틀(다운로드)',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '다운로드 추가 컨텐츠',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '온라인 이용권',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '선불번호',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '무료컨텐츠',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '아미보',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '프로컨트롤러',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '조이콘',
-                                                max: 3000000
+                                                max: 100000
                                             },
                                             {
                                                 name: '주변기기',
-                                                max: 3000000
+                                                max: 100000
                                             }
                                         ]
                                     },
@@ -930,47 +930,47 @@
                             // shape: 'circle',
                             indicator: [{
                                 name: '본체',
-                                max: 3000000
+                                max: 100000
                             },
                                 {
                                     name: '타이틀(패키지)',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '타이틀(다운로드)',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '다운로드 추가 컨텐츠',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '온라인 이용권',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '선불번호',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '무료컨텐츠',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '아미보',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '프로컨트롤러',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '조이콘',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '주변기기',
-                                    max: 3000000
+                                    max: 100000
                                 }
                             ]
                         },
@@ -998,47 +998,47 @@
                             // shape: 'circle',
                             indicator: [{
                                 name: '본체',
-                                max: 3000000
+                                max: 100000
                             },
                                 {
                                     name: '타이틀(패키지)',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '타이틀(다운로드)',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '다운로드 추가 컨텐츠',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '온라인 이용권',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '선불번호',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '무료컨텐츠',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '아미보',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '프로컨트롤러',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '조이콘',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '주변기기',
-                                    max: 3000000
+                                    max: 100000
                                 }
                             ]
                         },
@@ -1066,47 +1066,47 @@
                             // shape: 'circle',
                             indicator: [{
                                 name: '본체',
-                                max: 3000000
+                                max: 100000
                             },
                                 {
                                     name: '타이틀(패키지)',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '타이틀(다운로드)',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '다운로드 추가 컨텐츠',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '온라인 이용권',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '선불번호',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '무료컨텐츠',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '아미보',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '프로컨트롤러',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '조이콘',
-                                    max: 3000000
+                                    max: 100000
                                 },
                                 {
                                     name: '주변기기',
-                                    max: 3000000
+                                    max: 100000
                                 }
                             ]
                         },
@@ -1176,7 +1176,7 @@
                 "start" : start
             },
             success: function (data) {
-                alert("게임 자동 등록에 성공했습니다!");
+                alert(data);
             }
             ,error : function (request, status, error) {
                 console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
