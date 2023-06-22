@@ -30,6 +30,7 @@ Server : Apache Tomcat
  **PPT**
 
 : [https://www.miricanvas.com/v/11nv5pm](https://www.miricanvas.com/v/11nv5pm)
+
  
 
  **ERD**
@@ -41,7 +42,7 @@ Server : Apache Tomcat
 :page_with_curl: **담당 업무**
 1. 로그인, 회원가입
 2. 공지사항, 이벤트 게시판
-3. 관리자, 판매자 페이지 index
+3. 관리자, 판매자 index 페이지
 4. 프로젝트 시연 및 발표
 5. 일지 기록
 
