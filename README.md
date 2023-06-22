@@ -19,8 +19,6 @@
 
 4명
 
-</br>
-
 - **사용 Skill**
 
 Frontend : HTML, CSS, Javascript, jQuery, JSTL, Bootstrap
@@ -31,20 +29,14 @@ Database : MyBatis, MariaDB
 
 Server : Apache Tomcat
 
-</br>
-
 - **Github**
 
 : [https://github.com/daaaaaeun/ProjectContinue](https://github.com/daaaaaeun/ProjectContinue)
-
-</br>
 
 - **PPT**
 
 : [https://www.miricanvas.com/v/11nv5pm](https://www.miricanvas.com/v/11nv5pm)
  
-
-</br>
 
 - **ERD**
     
