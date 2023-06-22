@@ -3,23 +3,15 @@
 
 ![logo.png](Images/logo.png)  
 
-</br>
+---
 
-- **한 줄 소개**
+:loudspeaker: **한 줄 소개** : 콘솔 게임 오픈 마켓 및 모집 게시판
 
-콘솔 게임 오픈 마켓 및 모집 게시판
+:speech_balloon: **제작 기간** : 2022.11.16 ~ 2022.12.26
 
-</br>
+:running: **팀 구성** : 4명
 
-- **제작 기간**
-
-2022.11.16 ~ 2022.12.26
-
-- **팀 구성**
-
-4명
-
-- **사용 Skill**
+:bulb: **사용 Skill**
 
 Frontend : HTML, CSS, Javascript, jQuery, JSTL, Bootstrap
 
@@ -29,26 +21,28 @@ Database : MyBatis, MariaDB
 
 Server : Apache Tomcat
 
-- **Github**
+---
+
+ **Github**
 
 : [https://github.com/daaaaaeun/ProjectContinue](https://github.com/daaaaaeun/ProjectContinue)
 
-- **PPT**
+ **PPT**
 
 : [https://www.miricanvas.com/v/11nv5pm](https://www.miricanvas.com/v/11nv5pm)
  
 
-- **ERD**
+ **ERD**
     
 ![ERD.png](Images/ERD.png)
     
+---
 
-</br>
-
-- **담당 업무**
-1. 모집 부분 : 모집글 등록, 모집 메인, 모집 상세
+:page_with_curl: **담당 업무**
+1. 로그인, 회원가입
 2. 관리자 부분 : 자동 등록
 3. 미니게임
+4. 프로젝트 시연 및 발표
 
 </br>
 
