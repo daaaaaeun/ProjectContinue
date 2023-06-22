@@ -30,7 +30,7 @@ CREATE TABLE tb_seller
 ALTER TABLE tb_seller CHANGE sl_receive sl_receive  char(1) NOT NULL default 'N';
 
 INSERT INTO tb_seller (sl_id, sl_pw, sl_name, sl_zip, sl_adr1, sl_adr2, sl_phone, sl_birth, sl_grade, sl_receive, sl_number, sl_bank, sl_bankcode)
-VALUES ('ekdm1234', '1q2w3e4r!', '닌텐돌', '09876', '경기도 성남시 분당구 정자일로', '95', '031-1111-2222', '19801002', 'SVIP', 'Y', '123-12-12345', '110-36-2345-474', 4)
+VALUES ('12345', '12345', '닌텐도', '09876', '경기도 성남시 분당구 정자일로', '95', '031-1111-2222', '19801002', 'SVIP', 'Y', '123-12-12345', '110-36-2345-474', 4)
      ,('pogjj777', 'qwerty33!!', '닝텐도', '54321', '서울특별시 강남구 테헤란로', '124 4층', '02-5566-3344', '19900428', 'SGOLD', 'Y', '392-48-38727', '396-4804-9385-11', 11)
      ,('digj1908', 'dkanrjsk33', '닌텡도', '76543', '경기도 성남시 분당구 판교역로241번길', '20', '010-9977-4567', '19750530', 'SGOLD', 'N', '698-29-28744', '3454-334-583492', 88)
      ,('itwill', 'dkdk123', '닝텡동', '43210', '강원도 양구군 남면 삼팔선로', '112', '010-0101-2222', '19990202', 'SSILVER', 'Y', '123-16-45645', '110-462-057303', 4)
@@ -44,7 +44,7 @@ select * from tb_seller;
 -- 회원등급
 SELECT sl_grade
 FROM tb_seller
-WHERE sl_id='itwill' AND sl_pw='dkdk123' AND sl_grade IN ('SVip', 'SGold', 'SSilver', 'SBronze', 'SNew');
+WHERE sl_id='12345' AND sl_pw='12345' AND sl_grade IN ('SVip', 'SGold', 'SSilver', 'SBronze', 'SNew');
 
 INSERT INTO tb_seller(sl_id, sl_pw, sl_name, sl_zip, sl_adr1, sl_adr2, sl_phone, sl_birth, sl_receive, sl_number, sl_bank, sl_bankcode)
 VALUES ('dddd', '1234', 'cd', '12345', '12345', '12345', '123456789', '19990408', '1212', 1, '1234', '1234');
@@ -53,7 +53,7 @@ VALUES ('dddd', '1234', 'cd', '12345', '12345', '12345', '123456789', '19990408'
 select dt_prog, count(*) as cnt, dt.ss_num, sl.sl_id
 from tb_detail dt join tb_sales sl
 on dt.ss_num = sl.ss_num
-where sl_id = 'codingking'
+where sl_id = '12345'
 group by dt_prog
 order by dt_prog;
 
@@ -77,7 +77,7 @@ from (
         from tb_detail dt join tb_sales sl
         on dt.ss_num = sl.ss_num join tb_order od
         on dt.od_num = od.od_num
-        where sl_id = 'codingking' and od_date = ''
+        where sl_id = '12345' and od_date = ''
         group by dt_prog
         order by dt_prog
     ) tba right join (select *
@@ -99,7 +99,7 @@ select dt.dt_prog, dt.ss_num, sl_id, count(*) as cnt
 from tb_order od join tb_detail dt
 on od.od_num = dt.od_num join tb_sales sl
 on dt.ss_num = sl.ss_num
-where od_date between '20221201' and '20221231' and sl_id = 'codingking'
+where od_date between '20221201' and '20221231' and sl_id = '12345'
 group by dt_prog;
 
 
@@ -164,7 +164,7 @@ from (
          from tb_detail dt join tb_sales sl
                                 on dt.ss_num = sl.ss_num join tb_order od
                                                               on dt.od_num = od.od_num
-         where sl_id = 'codingking'
+         where sl_id = '12345'
          group by dt_prog
          order by dt_prog
      ) tba right join (select *

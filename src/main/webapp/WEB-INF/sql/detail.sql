@@ -1,7 +1,7 @@
 select od.od_num, mem_id, dt_prog, count(dt_prog)
 from tb_order od join tb_detail dt
 on od.od_num = dt.od_num
-where mem_id = 'fjhdmj555'
+where mem_id = '12345'
 group by dt_prog
 order by dt_prog;
 
@@ -9,7 +9,7 @@ order by dt_prog;
 select od.od_num, mem_id, dt_prog, count(dt_prog)
 from tb_order od join tb_detail dt
                       on od.od_num = dt.od_num
-where mem_id = 'fjhdmj555'
+where mem_id = '12345'
 group by dt_prog;
 
 select *
@@ -39,7 +39,7 @@ from (
     select 'J07' dt_prog from dual union all
     select 'J08' dt_prog from dual
     ) tb) tbj on tbj.dt_prog = dt.dt_prog
-where mem_id = 'fjhdmj555'
+where mem_id = '12345'
 group by tbj.dt_prog
 order by tbj.dt_prog;
 

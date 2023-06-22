@@ -1,11 +1,11 @@
 select mem_dvinfo, mem_dvadr1, mem_dvadr2, mem_dvphone, mem_dvnick
 from tb_memdv
-where mem_id = 'fjhdmj555';
+where mem_id = '12345';
 
 
 select mem_dvnum, mem_dvinfo, mem_dvadr1, mem_dvadr2, mem_dvphone, mem_dvnick
 from tb_memdv
-where mem_id = 'fjhdmj555';
+where mem_id = '12345';
 
 update tb_memdv
 set mem_dvadr2 = '97'

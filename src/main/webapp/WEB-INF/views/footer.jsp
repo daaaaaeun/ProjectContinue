@@ -12,8 +12,8 @@
           <ul>
             <li>서울특별시 강남구 테헤란로1길 16</li>
             <li>삼원빌딩</li>
-            <li>Phone : +82 010-8814-8233</li>
-            <li>Email : koochunwoo@gmail.com</li>
+            <li>Phone : +82 010-4617-9187</li>
+            <li>Email : ed0408202@gmail.com</li>
           </ul>
         </div>
       </div>

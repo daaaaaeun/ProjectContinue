@@ -2,8 +2,8 @@ select dv_fee + dv_extrafee as dv_sum, sl.dv_num
 from tb_basket bk join tb_sales sl
                        on bk.ss_num = sl.ss_num
                   join tb_delivery dv on sl.dv_num = dv.dv_num
-where mem_id = 'gjdjj888'
-group by sl.dv_num
+where mem_id = '12345'
+group by sl.dv_num;
 
 
 select rv_num, rv.mem_id, rv_content, rv_star, rv_filename, ss_num, mem_nick
@@ -16,7 +16,7 @@ select bk_num, bk_amount, mem_id, ss_name, ss_img, ss_price, sl.ss_num, dv_fee
 from tb_basket bk join tb_sales sl
                        on bk.ss_num = sl.ss_num
                   join tb_delivery dv on sl.dv_num = dv.dv_num
-where mem_id = 'gjdjj888';
+where mem_id = '12345';
 
 select receiptNo
 from (select concat(cast(d.receiptDate as char), right(concat('00000', rowCount + 1), 6)) as receiptNo,

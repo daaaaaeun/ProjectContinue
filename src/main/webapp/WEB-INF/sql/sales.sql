@@ -16,13 +16,13 @@ where r >= #{startRow} and r <= #{endRow}
 
 select ss_img, ss_price, ss_name
 from tb_sales
-where sl_id = 'codingking';
+where sl_id = '12345';
 
 select *
 from(
     select ss_img, ss_price, ss_name
     from tb_sales
-    where sl_id = 'codingking'
+    where sl_id = '12345'
 ) AA,
     (select @rno :=0) BB;
 

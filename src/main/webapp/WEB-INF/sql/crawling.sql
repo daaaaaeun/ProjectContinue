@@ -5,7 +5,7 @@ create database practice;
 SET foreign_key_checks = 1;
 
 use practice;
-use nonchrono;
+use ed040820;
 
 create table tb_game
 (
