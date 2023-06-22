@@ -39,30 +39,16 @@ Server : Apache Tomcat
 
 </br>
 
-- **호스팅**
+- **PPT**
 
-: [http://ed040820.cafe24.com](http://ed040820.cafe24.com)
-
+: [https://www.miricanvas.com/v/11nv5pm](https://www.miricanvas.com/v/11nv5pm)
  
-</br>
-
-<aside>
-
-✅ **회원 & 판매자 로그인**<br>
-ID : webmaster<br>
-PW : 12345<br>
-<br>
-**관리자 로그인** (최상단 좌측의 continue?를 클릭하여 관리자 모드 진입 가능)<br>
-ID : admin<br>
-PW : admin<br>
-
-</aside>
 
 </br>
 
 - **ERD**
     
-![nonchrono2.png](Images/nonchrono2.png)
+![ERD.png](Images/ERD.png)
     
 
 </br>
